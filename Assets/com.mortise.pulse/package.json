@@ -1,0 +1,19 @@
+{
+    "name": "com.mortise.pulse",
+    "version": "0.0.0",
+    "unity": "2019.4",
+    "author": {
+        "name": "onovich",
+        "email": "onovich1110@gmail.com"
+    },
+    "displayName": "MortiseFrame.Pulse",
+    "description": "An intersection detection library.",
+    "documentationURL": "https://github.com/onovich/Pulse",
+    "hideInEditor": false,
+    "category": "Collision Detection",
+    "keywords": [
+        "MortiseFrame",
+        "physics"
+    ],
+    "unityRelease": "16f1"
+}

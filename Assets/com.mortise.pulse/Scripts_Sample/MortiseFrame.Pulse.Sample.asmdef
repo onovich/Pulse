@@ -1,0 +1,16 @@
+{
+    "name": "MortiseFrame.Pulse.Sample",
+    "rootNamespace": "",
+    "references": [
+        "GUID:025e8816e5087cf4d921abc5fa3d8e6c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
