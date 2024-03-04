@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MortiseFrame.Pulse.Sample {
@@ -19,10 +17,18 @@ namespace MortiseFrame.Pulse.Sample {
         private OBB obbOBB;
 
         void RefreshBounds() {
-            aabb1AABB = new AABB(aabb1.position - aabb1.localScale / 2, aabb1.position + aabb1.localScale / 2);
-            aabb2AABB = new AABB(aabb2.position - aabb2.localScale / 2, aabb2.position + aabb2.localScale / 2);
-            circleCircle = new Circle(circle.position, circle.localScale.x / 2);
-            obbOBB = new OBB(obb.position, obb.localScale, obb.eulerAngles.z * Mathf.Deg2Rad);
+            var min1 = new MortiseFrame.Abacus.Vector2(aabb1.position.x - aabb1.localScale.x / 2, aabb1.position.y - aabb1.localScale.y / 2);
+            var max1 = new MortiseFrame.Abacus.Vector2(aabb1.position.x + aabb1.localScale.x / 2, aabb1.position.y + aabb1.localScale.y / 2);
+            var min2 = new MortiseFrame.Abacus.Vector2(aabb2.position.x - aabb2.localScale.x / 2, aabb2.position.y - aabb2.localScale.y / 2);
+            var max2 = new MortiseFrame.Abacus.Vector2(aabb2.position.x + aabb2.localScale.x / 2, aabb2.position.y + aabb2.localScale.y / 2);
+            var circleCenter = new MortiseFrame.Abacus.Vector2(circle.position.x, circle.position.y);
+            var circleRadius = circle.localScale.x / 2;
+            var obbCenter = new MortiseFrame.Abacus.Vector2(obb.position.x, obb.position.y);
+            var obbSize = new MortiseFrame.Abacus.Vector2(obb.localScale.x, obb.localScale.y);
+            aabb1AABB = new AABB(min1, max1);
+            aabb2AABB = new AABB(min2, max2);
+            circleCircle = new Circle(circleCenter, circleRadius);
+            obbOBB = new OBB(obbCenter, obbSize, obb.eulerAngles.z * Mathf.Deg2Rad);
         }
 
         void OnDrawGizmos() {
@@ -68,19 +74,24 @@ namespace MortiseFrame.Pulse.Sample {
 
         void OnDrawAABB(AABB aabb, Color color) {
             Gizmos.color = color;
-            Gizmos.DrawWireCube(aabb.Center, aabb.Size);
+            var center = new Vector3(aabb.Center.x, aabb.Center.y, 0);
+            var size = new Vector3(aabb.Size.x, aabb.Size.y, 0);
+            Gizmos.DrawWireCube(center, size);
         }
 
         void OnDrawCircle(Circle circle, Color color) {
             Gizmos.color = color;
-            Gizmos.DrawWireSphere(circle.Center, circle.Radius);
+            var circleCenter = new Vector3(circle.Center.x, circle.Center.y, 0);
+            Gizmos.DrawWireSphere(circleCenter, circle.Radius);
         }
 
         void OnDrawOBB(OBB obb, Color color) {
             Gizmos.color = color;
-            Vector2[] vertices = obb.Vertices;
+            MortiseFrame.Abacus.Vector2[] vertices = obb.Vertices;
             for (int i = 0; i < vertices.Length; i++) {
-                Gizmos.DrawLine(vertices[i], vertices[(i + 1) % vertices.Length]);
+                var vertex = new Vector3(vertices[i].x, vertices[i].y, 0);
+                var nextVertex = new Vector3(vertices[(i + 1) % vertices.Length].x, vertices[(i + 1) % vertices.Length].y, 0);
+                Gizmos.DrawLine(vertex, nextVertex);
             }
         }
 

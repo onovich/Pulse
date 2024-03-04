@@ -2,6 +2,7 @@
     "name": "MortiseFrame.Pulse.Sample",
     "rootNamespace": "",
     "references": [
+        "GUID:8bae2f23322789e429cb9222c6dc46dc",
         "GUID:025e8816e5087cf4d921abc5fa3d8e6c"
     ],
     "includePlatforms": [],
