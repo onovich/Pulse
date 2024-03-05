@@ -1,75 +1,169 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MortiseFrame.Pulse.Sample {
 
     public class AABBIntersectSample : MonoBehaviour {
-
-        [SerializeField] Transform aabb1;
-        [SerializeField] Transform aabb2;
-        [SerializeField] Transform circle;
-        [SerializeField] Transform obb;
+        [SerializeField] List<Transform> aabbTs;
+        [SerializeField] List<Transform> circleTs;
+        [SerializeField] List<Transform> obbTs;
 
         [SerializeField] bool epsilonDirection = false;
+        [SerializeField] bool drawIntersect = true;
+        [SerializeField] bool drawOverlap = false;
 
-        private AABB aabb1AABB;
-        private AABB aabb2AABB;
-        private Circle circleCircle;
-        private OBB obbOBB;
+        List<AABB> aabbs;
+        List<Circle> circles;
+        List<OBB> obbs;
 
         void RefreshBounds() {
-            var min1 = new MortiseFrame.Abacus.Vector2(aabb1.position.x - aabb1.localScale.x / 2, aabb1.position.y - aabb1.localScale.y / 2);
-            var max1 = new MortiseFrame.Abacus.Vector2(aabb1.position.x + aabb1.localScale.x / 2, aabb1.position.y + aabb1.localScale.y / 2);
-            var min2 = new MortiseFrame.Abacus.Vector2(aabb2.position.x - aabb2.localScale.x / 2, aabb2.position.y - aabb2.localScale.y / 2);
-            var max2 = new MortiseFrame.Abacus.Vector2(aabb2.position.x + aabb2.localScale.x / 2, aabb2.position.y + aabb2.localScale.y / 2);
-            var circleCenter = new MortiseFrame.Abacus.Vector2(circle.position.x, circle.position.y);
-            var circleRadius = circle.localScale.x / 2;
-            var obbCenter = new MortiseFrame.Abacus.Vector2(obb.position.x, obb.position.y);
-            var obbSize = new MortiseFrame.Abacus.Vector2(obb.localScale.x, obb.localScale.y);
-            aabb1AABB = new AABB(min1, max1);
-            aabb2AABB = new AABB(min2, max2);
-            circleCircle = new Circle(circleCenter, circleRadius);
-            obbOBB = new OBB(obbCenter, obbSize, obb.eulerAngles.z * Mathf.Deg2Rad);
+
+            if (aabbTs == null || circleTs == null || obbTs == null) return;
+
+            aabbs = new List<AABB>();
+            circles = new List<Circle>();
+            obbs = new List<OBB>();
+
+            foreach (var aabbT in aabbTs) {
+                if (aabbT == null) continue;
+                var aabb = new AABB(new MortiseFrame.Abacus.Vector2(aabbT.position.x - aabbT.localScale.x / 2, aabbT.position.y - aabbT.localScale.y / 2),
+                    new MortiseFrame.Abacus.Vector2(aabbT.position.x + aabbT.localScale.x / 2, aabbT.position.y + aabbT.localScale.y / 2));
+                aabbs.Add(aabb);
+            }
+
+            foreach (var circleT in circleTs) {
+                if (circleT == null) continue;
+                var circle = new Circle(new MortiseFrame.Abacus.Vector2(circleT.position.x, circleT.position.y), circleT.localScale.x / 2);
+                circles.Add(circle);
+            }
+
+            foreach (var obbT in obbTs) {
+                if (obbT == null) continue;
+                var obb = new OBB(new MortiseFrame.Abacus.Vector2(obbT.position.x, obbT.position.y),
+                    new MortiseFrame.Abacus.Vector2(obbT.localScale.x, obbT.localScale.y), obbT.eulerAngles.z * Mathf.Deg2Rad);
+                obbs.Add(obb);
+            }
+
         }
 
-        void OnDrawGizmos() {
-
-            if (aabb1 == null || aabb2 == null || circle == null || obb == null) {
+        void OnDrawIntersect(float epsilon) {
+            if (!drawIntersect) {
                 return;
             }
 
-            RefreshBounds();
+            for (int i = 0; i < aabbs.Count; i++) {
+                for (int j = 0; j < aabbs.Count; j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectAABB_AABB(aabbs[i], aabbs[j], epsilon)) {
+                        OnDrawAABB(aabbs[i], Color.red);
+                        OnDrawAABB(aabbs[j], Color.red);
+                    }
+                }
+            }
+
+            for (int i = 0; i < aabbs.Count; i++) {
+                for (int j = 0; j < circles.Count; j++) {
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectAABB_Circle(aabbs[i], circles[j], epsilon)) {
+                        OnDrawAABB(aabbs[i], Color.red);
+                        OnDrawCircle(circles[j], Color.red);
+                    }
+                }
+            }
+
+            for (int i = 0; i < aabbs.Count; i++) {
+                for (int j = 0; j < obbs.Count; j++) {
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectAABB_OBB(aabbs[i], obbs[j], epsilon)) {
+                        OnDrawAABB(aabbs[i], Color.red);
+                        OnDrawOBB(obbs[j], Color.red);
+                    }
+                }
+            }
+
+            for (int i = 0; i < circles.Count; i++) {
+                for (int j = 0; j < circles.Count; j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectCircle_Circle(circles[i], circles[j], epsilon)) {
+                        OnDrawCircle(circles[i], Color.red);
+                        OnDrawCircle(circles[j], Color.red);
+                    }
+                }
+            }
+
+            for (int i = 0; i < obbs.Count; i++) {
+                for (int j = 0; j < obbs.Count; j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectOBB_OBB(obbs[i], obbs[j], epsilon)) {
+                        OnDrawOBB(obbs[i], Color.red);
+                        OnDrawOBB(obbs[j], Color.red);
+                    }
+                }
+            }
+
+            for (int i = 0; i < circles.Count; i++) {
+                for (int j = 0; j < obbs.Count; j++) {
+                    if (MortiseFrame.Pulse.InsersectPF.IsIntersectCircle_OBB(circles[i], obbs[j], epsilon)) {
+                        OnDrawCircle(circles[i], Color.red);
+                        OnDrawOBB(obbs[j], Color.red);
+                    }
+                }
+            }
+        }
+
+        void OnDrawOverlap(float epsilon) {
+            if (!drawOverlap) {
+                return;
+            }
+
+            for (int i = 0; i < aabbs.Count; i++) {
+                for (int j = 0; j < circles.Count; j++) {
+                    if (MortiseFrame.Pulse.InsersectPF.OverlapCircle_AABB(aabbs[i], circles[j], epsilon, out var hits)) {
+                        OnDrawAABB(aabbs[i], Color.red);
+                        OnDrawCircle(circles[j], Color.red);
+                        var hitPoint = hits.point;
+                        var hitNormal = hits.normal;
+                        OnDrawPoint(hitPoint, Color.red);
+                        OnDrawRay(hitPoint, hitNormal, Color.red);
+                    }
+                }
+            }
+        }
+
+        void OnDrawGizmos() {
             var epsilon = epsilonDirection ? float.Epsilon : -float.Epsilon;
 
-            OnDrawAABB(aabb1AABB, Color.white);
-            OnDrawAABB(aabb2AABB, Color.green);
-            OnDrawCircle(circleCircle, Color.green);
-            OnDrawOBB(obbOBB, Color.green);
+            RefreshBounds();
 
-            if (IsIntersectAABB_AABB(aabb1AABB, aabb2AABB, epsilon)) {
-                OnDrawAABB(aabb1AABB, Color.red);
-                OnDrawAABB(aabb2AABB, Color.red);
+            foreach (var aabb in aabbs) {
+                OnDrawAABB(aabb, Color.white);
             }
-            if (IsIntersectAABB_Circle(aabb1AABB, circleCircle, epsilon)) {
-                OnDrawAABB(aabb1AABB, Color.red);
-                OnDrawCircle(circleCircle, Color.red);
+
+            foreach (var circle in circles) {
+                OnDrawCircle(circle, Color.white);
             }
-            if (IsIntersectAABB_OBB(aabb1AABB, obbOBB, epsilon)) {
-                OnDrawAABB(aabb1AABB, Color.red);
-                OnDrawOBB(obbOBB, Color.red);
+
+            foreach (var obb in obbs) {
+                OnDrawOBB(obb, Color.white);
             }
+
+            OnDrawIntersect(epsilon);
+            OnDrawOverlap(epsilon);
 
         }
 
-        bool IsIntersectAABB_AABB(AABB a, AABB b, float epsilon) {
-            return InsersectPF.IsIntersectAABB_AABB(a, b, epsilon);
+        void OnDrawRay(MortiseFrame.Abacus.Vector2 origin, MortiseFrame.Abacus.Vector2 direction, Color color) {
+            Gizmos.color = color;
+            Gizmos.DrawRay(new Vector3(origin.x, origin.y, 0), new Vector3(direction.x, direction.y, 0));
         }
 
-        bool IsIntersectAABB_Circle(AABB aabb, Circle circle, float epsilon) {
-            return InsersectPF.IsIntersectAABB_Circle(aabb, circle, epsilon);
-        }
-
-        bool IsIntersectAABB_OBB(AABB aabb, OBB obb, float epsilon) {
-            return InsersectPF.IsIntersectAABB_OBB(aabb, obb, epsilon);
+        void OnDrawPoint(MortiseFrame.Abacus.Vector2 point, Color color) {
+            Gizmos.color = color;
+            Gizmos.DrawSphere(new Vector3(point.x, point.y, 0), 0.1f);
         }
 
         void OnDrawAABB(AABB aabb, Color color) {

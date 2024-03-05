@@ -83,17 +83,16 @@ namespace MortiseFrame.Pulse {
 
             if (isCollided) {
                 Vector2 clampedCenter = Vector2.Max(aabb.Min, Vector2.Min(aabb.Max, circle.Center));
-                Vector2 collisionDirection = (circle.Center - clampedCenter).normalized;
-                Vector2 collisionPoint = clampedCenter;
-                Vector2 collisionNormal = -collisionDirection;
+                Vector2 hitDirection = (circle.Center - clampedCenter).normalized;
+                Vector2 hitPoint = clampedCenter;
 
                 if (clampedCenter != circle.Center) {
-                    collisionPoint = circle.Center - collisionDirection * circle.Radius;
+                    hitPoint = circle.Center - hitDirection * circle.Radius;
                 }
 
-                hits = new Hits(collisionPoint, collisionNormal);
+                hits = new Hits(hitPoint, hitDirection);
             } else {
-                hits = new Hits(Vector2.zero, Vector2.zero);
+                hits = default;
             }
 
             return isCollided;
