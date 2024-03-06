@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class AABB {
+    public class AABB : IShape {
 
         public Vector2 Min { get; private set; }
         public Vector2 Max { get; private set; }

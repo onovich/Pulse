@@ -78,11 +78,13 @@ namespace MortiseFrame.Pulse {
 
         }
 
-        public static bool OverlapCircle_AABB(AABB aabb, Circle circle, float epsilon, out Hits hits) {
-            bool isCollided = IsIntersectAABB_Circle(aabb, circle, epsilon);
+        public static bool OverlapCircle_AABB(Circle circle, AABB aabb, Vector2 offset, float epsilon, out Hits hits) {
+
+            var _aabb = new AABB(aabb.Min + offset, aabb.Max + offset);
+            bool isCollided = IsIntersectAABB_Circle(_aabb, circle, epsilon);
 
             if (isCollided) {
-                Vector2 clampedCenter = Vector2.Max(aabb.Min, Vector2.Min(aabb.Max, circle.Center));
+                Vector2 clampedCenter = Vector2.Max(_aabb.Min, Vector2.Min(_aabb.Max, circle.Center));
                 Vector2 hitDirection = (circle.Center - clampedCenter).normalized;
                 Vector2 hitPoint = clampedCenter;
 
@@ -90,7 +92,7 @@ namespace MortiseFrame.Pulse {
                     hitPoint = circle.Center - hitDirection * circle.Radius;
                 }
 
-                hits = new Hits(hitPoint, hitDirection);
+                hits = new Hits(hitPoint, -hitDirection, aabb);
             } else {
                 hits = default;
             }

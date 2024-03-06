@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class Circle {
+    public class Circle:IShape {
 
         public Vector2 Center { get; private set; }
         public float Radius { get; private set; }
