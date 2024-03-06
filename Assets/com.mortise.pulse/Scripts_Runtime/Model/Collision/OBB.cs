@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class OBB : IShape {
+    public class OBB {
 
         public Vector2 AxisX { get; private set; }
         public Vector2 AxisY { get; private set; }

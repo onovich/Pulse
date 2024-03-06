@@ -2,20 +2,22 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class AABB : IShape {
+    public struct AABB {
 
-        public Vector2 Min { get; private set; }
-        public Vector2 Max { get; private set; }
+        Vector2 min;
+        public Vector2 Min => min;
+
+        Vector2 max;
+        public Vector2 Max => max;
+
+        public AABB(Vector2 center, Vector2 size) {
+            min = center - size / 2;
+            max = center + size / 2;
+        }
+
         public Vector2 Center => GetCenter();
         public Vector2 Size => GetSize();
-        public float Height => GetHeight();
-        public float Width => GetWidth();
         public Vector2[] Axis => GetAxis();
-
-        public AABB(Vector2 min, Vector2 max) {
-            Min = min;
-            Max = max;
-        }
 
         public bool Contains(Vector2 point) {
             return point.x >= Min.x && point.x <= Max.x && point.y >= Min.y && point.y <= Max.y;
@@ -39,8 +41,8 @@ namespace MortiseFrame.Pulse {
 
         public void SetCenter(Vector2 center) {
             var size = GetSize();
-            Min = center - size / 2;
-            Max = center + size / 2;
+            min = center - size / 2;
+            max = center + size / 2;
         }
 
         public (float Min, float Max) ProjectOntoAxis(Vector2 axis) {
