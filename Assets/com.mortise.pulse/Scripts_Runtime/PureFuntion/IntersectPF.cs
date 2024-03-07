@@ -108,11 +108,6 @@ namespace MortiseFrame.Pulse {
             return Vector2.Distance(circle.Center, closestPointOnOBB) <= circle.Radius + epsilon;
         }
 
-        static bool ProjectionsOverlap((float Min, float Max) a, (float Min, float Max) b, float epsilon) {
-            var res = b.Max - a.Min > epsilon && a.Max - b.Min > epsilon;
-            return res;
-        }
-
     }
 
 }
