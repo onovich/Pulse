@@ -27,7 +27,7 @@ namespace MortiseFrame.Pulse {
                 return IsIntersectCircle_Box(b.Transform, bCircleB, a.Transform, aBox, epsilon);
             }
             if (aCircle != null && bBox != null) {
-                return IsIntersectCircle_Box(b.Transform, aCircle, b.Transform, bBox, epsilon);
+                return IsIntersectCircle_Box(a.Transform, aCircle, b.Transform, bBox, epsilon);
             }
 
             return false;
@@ -36,7 +36,7 @@ namespace MortiseFrame.Pulse {
         static bool IsIntersectBox_Box(Transform aTF, BoxShape aBox, Transform bTF, BoxShape bBox, float epsilon) {
             // AABB & AABB
             if (aTF.RadAngle == 0 && bTF.RadAngle == 0) {
-                return IsIntersectAABB_AABB(aBox.GetAABB(aTF), bBox.GetAABB(aTF), epsilon);
+                return IsIntersectAABB_AABB(aBox.GetAABB(aTF), bBox.GetAABB(bTF), epsilon);
             }
             // OBB & OBB
             return IsIntersectOBB_OBB(aBox.GetOBB(aTF), bBox.GetOBB(bTF), epsilon);
@@ -52,10 +52,10 @@ namespace MortiseFrame.Pulse {
         static bool IsIntersectCircle_Box(Transform circleTF, CircleShape circle, Transform boxTF, BoxShape box, float epsilon) {
             // Circle & AABB
             if (boxTF.RadAngle == 0) {
-                return IsIntersectAABB_Circle(box.GetAABB(boxTF), new Sphere(circleTF.Pos, circle.Radius), epsilon);
+                return IsIntersectAABB_Sphere(box.GetAABB(boxTF), circle.GetSphere(circleTF), epsilon);
             }
             // Circle & OBB
-            return IsIntersectOBB_Circle(new Sphere(circleTF.Pos, circle.Radius), box.GetOBB(boxTF), epsilon);
+            return IsIntersectOBB_Sphere(circle.GetSphere(circleTF), box.GetOBB(boxTF), epsilon);
         }
 
         static bool IsIntersectAABB_AABB(AABB a, AABB b, float epsilon) {
@@ -63,10 +63,10 @@ namespace MortiseFrame.Pulse {
                    (b.Max.x - a.Min.x > epsilon) && (a.Max.x - b.Min.x > epsilon);
         }
 
-        static bool IsIntersectAABB_Circle(AABB aabb, Sphere circle, float epsilon) {
-            Vector2 clampedCenter = Vector2.Max(aabb.Min, Vector2.Min(aabb.Max, circle.Center));
-            float distanceSquared = (clampedCenter - circle.Center).sqrMagnitude;
-            return distanceSquared <= (circle.Radius * circle.Radius + epsilon);
+        static bool IsIntersectAABB_Sphere(AABB aabb, Sphere sphere, float epsilon) {
+            Vector2 clampedCenter = Vector2.Max(aabb.Min, Vector2.Min(aabb.Max, sphere.Center));
+            float distanceSquared = (clampedCenter - sphere.Center).sqrMagnitude;
+            return distanceSquared <= (sphere.Radius * sphere.Radius + epsilon);
         }
 
         static bool IsIntersectOBB_OBB(OBB obb1, OBB obb2, float epsilon) {
@@ -93,8 +93,8 @@ namespace MortiseFrame.Pulse {
             return range;
         }
 
-        static bool IsIntersectOBB_Circle(Sphere circle, OBB obb, float epsilon) {
-            Vector2 localSphereCenter = circle.Center - obb.Center;
+        static bool IsIntersectOBB_Sphere(Sphere sphere, OBB obb, float epsilon) {
+            Vector2 localSphereCenter = sphere.Center - obb.Center;
             Vector2 closestPointOnOBB = obb.Center;
 
             foreach (var axis in new Vector2[] { obb.AxisX, obb.AxisY }) {
@@ -105,7 +105,7 @@ namespace MortiseFrame.Pulse {
                 closestPointOnOBB += axis * clampedDistance;
             }
 
-            return Vector2.Distance(circle.Center, closestPointOnOBB) <= circle.Radius + epsilon;
+            return Vector2.Distance(sphere.Center, closestPointOnOBB) <= sphere.Radius + epsilon;
         }
 
     }

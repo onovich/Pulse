@@ -47,7 +47,7 @@ namespace MortiseFrame.Pulse {
         float mass;
         public float Mass => mass;
 
-        RigidbodyEntity(Vector2 pos, IShape shape) {
+        public RigidbodyEntity(Vector2 pos, IShape shape) {
             this.id = IDService.PickRigidbodyID();
             this.transform = new Transform(pos);
             this.shape = shape;
@@ -59,6 +59,9 @@ namespace MortiseFrame.Pulse {
             this.holderType = 0;
             this.holderID = 0;
         }
+
+        // ID
+        public void SetID(uint value) => id = value;
 
         // Trigger
         public void SetIsTrigger(bool value) => isTrigger = value;
@@ -84,6 +87,10 @@ namespace MortiseFrame.Pulse {
         // Transform
         public void SetPos(Vector2 pos) {
             transform.SetPos(pos);
+        }
+
+        public void SetRadAngle(float radAngle) {
+            transform.SetRadAngle(radAngle);
         }
 
     }

@@ -4,9 +4,6 @@ namespace MortiseFrame.Pulse {
 
     public class CircleShape : IShape {
 
-        Vector2 center;
-        public Vector2 Center => center;
-
         float radius;
         public float Radius => radius;
 
@@ -14,8 +11,12 @@ namespace MortiseFrame.Pulse {
             this.radius = radius;
         }
 
+        public Sphere GetSphere(Transform transform) {
+            return new Sphere(transform.Pos, radius);
+        }
+
         public bool Contains(Vector2 point) {
-            var diff = point - center;
+            var diff = point;
             if (diff.SqrMagnitude() <= radius * radius) {
                 return true;
             }

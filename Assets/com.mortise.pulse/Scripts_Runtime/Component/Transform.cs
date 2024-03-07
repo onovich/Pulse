@@ -19,6 +19,10 @@ namespace MortiseFrame.Pulse {
             this.pos = pos;
         }
 
+        public void SetRadAngle(float radAngle) {
+            this.radAngle = radAngle;
+        }
+
     }
 
 }

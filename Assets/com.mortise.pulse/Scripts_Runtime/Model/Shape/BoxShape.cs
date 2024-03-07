@@ -7,7 +7,7 @@ namespace MortiseFrame.Pulse {
         Vector2 size;
         public Vector2 Size => size;
 
-        BoxShape(Vector2 size) {
+        public BoxShape(Vector2 size) {
             this.size = size;
         }
 
