@@ -40,7 +40,33 @@ namespace MortiseFrame.Pulse {
         }
 
         static void ApplyBounce(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
+            if (a.IsStatic && b.IsStatic) {
+                return;
+            }
 
+            // 计算碰撞法线
+            var collisionNormal = (b.Transform.Pos - a.Transform.Pos).normalized;
+            var relativeVelocity = b.Velocity - a.Velocity;
+            var velocityAlongNormal = Vector2.Dot(relativeVelocity, collisionNormal);
+
+            // 如果速度沿法线方向是远离的，不应用反弹
+            if (velocityAlongNormal > 0) {
+                return;
+            }
+
+            // 计算最低弹性系数
+            var restitution = Mathf.Min(a.Material.Restitution, b.Material.Restitution);
+
+            // 计算反弹速度
+            var bounceVelocity = -velocityAlongNormal * restitution;
+
+            // 应用反弹速度
+            if (!a.IsStatic) {
+                a.SetVelocity(a.Velocity + collisionNormal * bounceVelocity);
+            }
+            if (!b.IsStatic) {
+                b.SetVelocity(b.Velocity - collisionNormal * bounceVelocity);
+            }
         }
 
         static void RestoreDynamic_Static(PhysicalContext context, RigidbodyEntity d, RigidbodyEntity s) {

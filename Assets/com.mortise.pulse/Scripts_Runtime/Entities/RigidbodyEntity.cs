@@ -43,16 +43,16 @@ namespace MortiseFrame.Pulse {
         Vector2 velocity;
         public Vector2 Velocity => velocity;
 
-        // Gravity
-        float gravityScale;
-        public float GravityScale => gravityScale;
+        // Mass
+        float mass;
+        public float Mass => mass;
 
         RigidbodyEntity(Vector2 pos, IShape shape) {
             this.id = IDService.PickRigidbodyID();
             this.transform = new Transform(pos);
             this.shape = shape;
             this.velocity = Vector2.zero;
-            this.gravityScale = 0;
+            this.mass = 0;
             this.isTrigger = false;
             this.isStatic = false;
             this.layer = 0;
@@ -70,7 +70,7 @@ namespace MortiseFrame.Pulse {
         public void SetVelocity(Vector2 value) => velocity = value;
 
         // Gravity
-        public void SetGravityScale(float value) => gravityScale = value;
+        public void SetMass(float value) => mass = value;
 
         // Holder
         public void SetHolder(int type, int id) {

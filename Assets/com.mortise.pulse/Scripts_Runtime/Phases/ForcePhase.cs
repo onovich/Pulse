@@ -17,10 +17,10 @@ namespace MortiseFrame.Pulse {
             if (rb.IsStatic) {
                 return;
             }
-            if (rb.GravityScale == 0) {
+            if (rb.Mass == 0) {
                 return;
             }
-            var velocity = rb.Velocity + context.Gravity * rb.GravityScale * dt;
+            var velocity = rb.Velocity + context.Gravity * rb.Mass * dt;
             rb.SetVelocity(velocity);
         }
 
