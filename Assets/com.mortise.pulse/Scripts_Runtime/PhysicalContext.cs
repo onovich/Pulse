@@ -187,7 +187,13 @@ namespace MortiseFrame.Pulse {
             return collisionContacts.ContainsKey(key);
         }
 
-        public KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] CollisionContact_TakeAll() {
+        public void CollisionContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
+            foreach (var pair in collisionContacts.Values) {
+                action.Invoke(pair);
+            }
+        }
+
+        public KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] CollisionContact_GetAll() {
             return collisionContacts.ToArray();
         }
 

@@ -70,18 +70,27 @@ namespace MortiseFrame.Pulse {
         }
 
         static bool IsIntersectOBB_OBB(OBB obb1, OBB obb2, float epsilon) {
-            Vector2[] axesToTest = { obb1.AxisX, obb1.AxisY, obb2.AxisX, obb2.AxisY };
+            bool notInAX = NotIntersectInAxis_OBB(obb1.Vertices, obb2.Vertices, obb1.AxisX, epsilon);
+            bool notInAY = NotIntersectInAxis_OBB(obb1.Vertices, obb2.Vertices, obb1.AxisY, epsilon);
+            bool notInBX = NotIntersectInAxis_OBB(obb1.Vertices, obb2.Vertices, obb2.AxisX, epsilon);
+            bool notInBY = NotIntersectInAxis_OBB(obb1.Vertices, obb2.Vertices, obb2.AxisY, epsilon);
+            return !(notInAX || notInAY || notInBX || notInBY);
+        }
 
-            foreach (var axis in axesToTest) {
-                var projection1 = obb1.ProjectOntoAxis(axis);
-                var projection2 = obb2.ProjectOntoAxis(axis);
+        static bool NotIntersectInAxis_OBB(Vector2[] verticesA, Vector2[] verticesB, Vector2 axis, float epsilon) {
+            Vector2 rangeA = Project_OBB(verticesA, axis);
+            Vector2 rangeB = Project_OBB(verticesB, axis);
+            return (rangeA.x - rangeB.y > epsilon) || (rangeB.x - rangeA.y > epsilon);
+        }
 
-                if (!ProjectionsOverlap(projection1, projection2, epsilon)) {
-                    return false;
-                }
+        static Vector2 Project_OBB(Vector2[] vertices, Vector2 axis) {
+            var range = new Vector2(float.MaxValue, float.MinValue);
+            foreach (var vertex in vertices) {
+                var projection = Vector2.Dot(vertex, axis);
+                range.x = Mathf.Min(range.x, projection);
+                range.y = Mathf.Max(range.y, projection);
             }
-
-            return true;
+            return range;
         }
 
         static bool IsIntersectOBB_Circle(Sphere circle, OBB obb, float epsilon) {
@@ -100,10 +109,8 @@ namespace MortiseFrame.Pulse {
         }
 
         static bool ProjectionsOverlap((float Min, float Max) a, (float Min, float Max) b, float epsilon) {
-
             var res = b.Max - a.Min > epsilon && a.Max - b.Min > epsilon;
             return res;
-
         }
 
     }

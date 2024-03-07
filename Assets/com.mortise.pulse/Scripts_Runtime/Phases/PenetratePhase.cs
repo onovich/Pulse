@@ -1,8 +1,21 @@
+using MortiseFrame.Abacus;
+
 namespace MortiseFrame.Pulse {
 
     public static class PenetratePhase {
 
         public static void Tick(PhysicalContext context, float dt) {
+
+            context.CollisionContact_ForEach((kv) => {
+                var a = kv.Item2;
+                var b = kv.Item3;
+                if (a.IsStatic && b.IsStatic) {
+                    return;
+                }
+                ApplyRestore(context, a, b);
+                ApplyBounce(context, a, b);
+                ApplyCollisionStay(context, a, b);
+            });
 
         }
 
@@ -20,64 +33,34 @@ namespace MortiseFrame.Pulse {
             }
         }
 
+        static void ApplyCollisionStay(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
+            if (context.CollisionContact_Contains(a, b)) {
+                context.EnqueueCollisionStay(a, b);
+            }
+        }
+
+        static void ApplyBounce(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
+
+        }
+
         static void RestoreDynamic_Static(PhysicalContext context, RigidbodyEntity d, RigidbodyEntity s) {
 
-            var dShape = d.Shape;
-            var sShape = s.Shape;
-
-            var dTF = d.Transform;
-            var sTF = s.Transform;
-
-            var dBox = dShape as BoxShape;
-            var sBox = sShape as BoxShape;
-
-            var dCircle = dShape as CircleShape;
-            var sCircle = sShape as CircleShape;
-
-            if (dBox != null && sBox != null) {
-                if (dTF.RadAngle == 0 && sTF.RadAngle == 0) {
-                    RestoreDynamic_Static_AABB_AABB(context, d, dBox, s, sBox);
-                } else {
-                    RestoreDynamic_Static_OBB_OBB(context, d, dBox, s, sBox);
-                }
+            var overlapDepth = PenetratePF.PenetrateDepthRB_RB(d, s);
+            if (overlapDepth == Vector2.zero) {
                 return;
             }
-
-            if (dCircle != null && sCircle != null) {
-                RestoreDynamic_Static_Circle_Circle(context, d, dCircle, s, sCircle);
-                return;
-            }
-
-            if (dBox != null && sCircle != null) {
-                RestoreDynamic_Static_AABB_Circle(context, d, dBox, s, sCircle);
-                return;
-            }
-
-            if (dCircle != null && sBox != null) {
-                RestoreDynamic_Static_AABB_Circle(context, s, sBox, d, dCircle);
-                return;
-            }
+            d.Transform.SetPos(d.Transform.Pos + overlapDepth);
 
         }
 
         static void RestoreDynamic_Dynamic(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
 
-        }
-
-        static void RestoreDynamic_Static_AABB_AABB(PhysicalContext context, RigidbodyEntity d, BoxShape dBox, RigidbodyEntity s, BoxShape sBox) {
-
-
-        }
-
-        static void RestoreDynamic_Static_OBB_OBB(PhysicalContext context, RigidbodyEntity d, BoxShape dBox, RigidbodyEntity s, BoxShape sBox) {
-
-        }
-
-        static void RestoreDynamic_Static_Circle_Circle(PhysicalContext context, RigidbodyEntity d, CircleShape dCircle, RigidbodyEntity s, CircleShape sCircle) {
-
-        }
-
-        static void RestoreDynamic_Static_AABB_Circle(PhysicalContext context, RigidbodyEntity d, BoxShape dBox, RigidbodyEntity s, CircleShape sCircle) {
+            var overlapDepth = PenetratePF.PenetrateDepthRB_RB(a, b);
+            if (overlapDepth == Vector2.zero) {
+                return;
+            }
+            a.Transform.SetPos(a.Transform.Pos + overlapDepth);
+            throw new System.Exception("未实现 Dynamic-Dynamic 碰撞恢复");
 
         }
 

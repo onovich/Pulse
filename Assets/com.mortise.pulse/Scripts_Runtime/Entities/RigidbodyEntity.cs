@@ -27,6 +27,10 @@ namespace MortiseFrame.Pulse {
         IShape shape;
         public IShape Shape => shape;
 
+        // Material
+        PhysicalMaterial material;
+        public PhysicalMaterial Material => material;
+
         // Trigger
         bool isTrigger;
         public bool IsTrigger => isTrigger;
@@ -56,9 +60,6 @@ namespace MortiseFrame.Pulse {
             this.holderID = 0;
         }
 
-        // Layer
-        public void SetLayer(int value) => layer = value;
-
         // Trigger
         public void SetIsTrigger(bool value) => isTrigger = value;
 
@@ -77,22 +78,12 @@ namespace MortiseFrame.Pulse {
             holderID = id;
         }
 
+        // Material
+        public void SetMaterial(PhysicalMaterial value) => material = value;
+
         // Transform
         public void SetPos(Vector2 pos) {
             transform.SetPos(pos);
-        }
-
-        public void SetLocalPos(Vector2 localPos) {
-            transform.SetLocalPos(localPos);
-        }
-
-        public void CalculateWorldPosition(Transform parent) {
-
-            if (transform.LocalPos == Vector2.zero) {
-                return;
-            }
-
-            transform.SetPos(parent.Pos + transform.LocalPos);
         }
 
     }
