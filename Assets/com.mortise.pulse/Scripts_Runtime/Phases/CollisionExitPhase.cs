@@ -13,7 +13,7 @@ namespace MortiseFrame.Pulse {
                 return;
             }
             var evt = context.EventCenter;
-            evt.OnCollisionStay(a, b);
+            evt.OnCollisionExit(a, b);
         }
 
     }

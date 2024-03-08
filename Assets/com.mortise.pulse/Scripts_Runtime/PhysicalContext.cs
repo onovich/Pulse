@@ -240,7 +240,19 @@ namespace MortiseFrame.Pulse {
 
         public void IntersectContact_Clear() {
             intersectContacts.Clear();
+        }
 
+        public void Clear() {
+            rigidbodies.Clear();
+            collisionEnterQueue.Clear();
+            collisionStayQueue.Clear();
+            collisionExitQueue.Clear();
+            triggerEnterQueue.Clear();
+            triggerStayQueue.Clear();
+            triggerExitQueue.Clear();
+            collisionContacts.Clear();
+            intersectContacts.Clear();
+            eventCenter.Clear();
         }
 
     }

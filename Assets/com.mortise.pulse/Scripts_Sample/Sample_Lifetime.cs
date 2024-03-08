@@ -76,38 +76,14 @@ namespace MortiseFrame.Pulse.Sample {
                 dynamicCircleIDs[i] = rb.ID;
             }
 
-            core.EventCenter.OnCollisionEnterHandle += ClisionEnter;
-            core.EventCenter.OnCollisionExitHandle += ClisionExit;
-            core.EventCenter.OnCollisionStayHandle += ClisionStay;
+            core.EventCenter.OnCollisionEnterHandle = (a, b) => { Debug.Log($"OnCollisionEnter: {a.ID} {b.ID}"); };
+            core.EventCenter.OnCollisionExitHandle = (a, b) => { Debug.Log($"OnCollisionExit: {a.ID} {b.ID}"); };
+            core.EventCenter.OnCollisionStayHandle = (a, b) => { Debug.Log($"OnCollisionStay: {a.ID} {b.ID}"); };
 
-            core.EventCenter.OnTriggerEnterHandle += TriggerEnter;
-            core.EventCenter.OnTriggerExitHandle += TriggerExit;
-            core.EventCenter.OnTriggerStayHandle += TriggerStay;
+            core.EventCenter.OnTriggerEnterHandle = (a, b) => { Debug.Log($"OnTriggerEnter: {a.ID} {b.ID}"); };
+            core.EventCenter.OnTriggerExitHandle = (a, b) => { Debug.Log($"OnTriggerExit: {a.ID} {b.ID}"); };
+            core.EventCenter.OnTriggerStayHandle = (a, b) => { Debug.Log($"OnTriggerStay: {a.ID} {b.ID}"); };
 
-        }
-
-        void ClisionEnter(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"ClisionEnter: {a.ID} {b.ID}");
-        }
-
-        void ClisionExit(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"ClisionExit: {a.ID} {b.ID}");
-        }
-
-        void ClisionStay(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"ClisionStay: {a.ID} {b.ID}");
-        }
-
-        void TriggerEnter(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"TriggerEnter: {a.ID} {b.ID}");
-        }
-
-        void TriggerExit(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"TriggerExit: {a.ID} {b.ID}");
-        }
-
-        void TriggerStay(RigidbodyEntity a, RigidbodyEntity b) {
-            Debug.Log($"TriggerStay: {a.ID} {b.ID}");
         }
 
         void FixedUpdate() {

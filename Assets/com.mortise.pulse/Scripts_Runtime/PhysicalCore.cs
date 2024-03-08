@@ -4,12 +4,11 @@ namespace MortiseFrame.Pulse {
 
     public class PhysicalCore {
 
-        public PhysicalEventCenter EventCenter { get; private set; }
+        public PhysicalEventCenter EventCenter => context.EventCenter;
         PhysicalContext context;
 
         public PhysicalCore() {
             context = new PhysicalContext();
-            EventCenter = new PhysicalEventCenter();
         }
 
         // Gravity
@@ -74,6 +73,10 @@ namespace MortiseFrame.Pulse {
             CollisionEnterPhase.Tick(context, dt);
             CollisionStayPhase.Tick(context, dt);
 
+        }
+
+        public void Clear() {
+            context.Clear();
         }
 
     }

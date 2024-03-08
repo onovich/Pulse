@@ -9,7 +9,7 @@ namespace MortiseFrame.Pulse {
             context.CollisionContact_ForEach((kv) => {
                 var a = kv.Item2;
                 var b = kv.Item3;
-                if (a.IsStatic && b.IsStatic) {
+                if (a.IsStatic) {
                     return;
                 }
                 ApplyRestore(context, a, b);
@@ -75,6 +75,7 @@ namespace MortiseFrame.Pulse {
             if (overlapDepth == FVector2.zero) {
                 return;
             }
+            PLog.Log("RestoreDynamic_Static: dPos = " + d.Transform.Pos + "overlapDepth = " + overlapDepth);
             d.Transform.SetPos(d.Transform.Pos + overlapDepth);
 
         }

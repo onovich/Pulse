@@ -21,7 +21,7 @@ namespace MortiseFrame.Pulse {
 
             if (!context.CollisionContact_Contains(a, b)) {
                 context.CollisionContact_Add(a, b);
-                context.EnqueueCollisionExit(a, b);
+                context.EnqueueCollisionEnter(a, b);
             }
         }
 

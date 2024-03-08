@@ -7,8 +7,6 @@ namespace MortiseFrame.Pulse {
             var count = context.Rigidbody_TakeAll(out var entities);
             for (int i = 0; i < count; i++) {
                 var a = entities[i];
-                if (a.IsStatic) continue;
-
                 for (int j = i + 1; j < count; j++) {
                     var b = entities[j];
                     ApplyIntersection(context, a, b);
