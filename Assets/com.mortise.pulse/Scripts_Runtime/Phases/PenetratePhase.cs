@@ -84,8 +84,8 @@ namespace MortiseFrame.Pulse {
             if (overlapDepth == FVector2.zero) {
                 return;
             }
-            a.Transform.SetPos(a.Transform.Pos - overlapDepth);
-            b.Transform.SetPos(b.Transform.Pos + overlapDepth);
+            a.Transform.SetPos(a.Transform.Pos + overlapDepth);
+            b.Transform.SetPos(b.Transform.Pos - overlapDepth);
 
         }
 

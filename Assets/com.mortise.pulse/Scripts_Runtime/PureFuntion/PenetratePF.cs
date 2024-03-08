@@ -24,7 +24,7 @@ namespace MortiseFrame.Pulse {
 
             // Circle & Box
             if (aBox != null && bCircle != null) {
-                return PenetrateDepthCircle_Box(b.Transform, bCircle, a.Transform, aBox);
+                return -PenetrateDepthCircle_Box(b.Transform, bCircle, a.Transform, aBox);
             }
             if (aCircle != null && bBox != null) {
                 return PenetrateDepthCircle_Box(a.Transform, aCircle, b.Transform, bBox);
