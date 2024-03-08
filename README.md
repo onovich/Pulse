@@ -85,3 +85,6 @@ void FixedUpdate() {
 Math library
 
 github.com/onovich/Abacus
+
+# UPM URL
+ssh://git@github.com/onovich/Pulse.git?path=/Assets/com.mortise.pulse#main
