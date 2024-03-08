@@ -9,9 +9,6 @@ namespace MortiseFrame.Pulse {
             context.CollisionContact_ForEach((kv) => {
                 var a = kv.Item2;
                 var b = kv.Item3;
-                if (a.IsStatic) {
-                    return;
-                }
                 ApplyRestore(context, a, b);
                 ApplyBounce(context, a, b);
                 ApplyCollisionStay(context, a, b);
@@ -54,18 +51,20 @@ namespace MortiseFrame.Pulse {
                 return;
             }
 
-            // 计算最低弹性系数
-            var restitution = FMath.Min(a.Material.Restitution, b.Material.Restitution);
+            // 计算弹性系数
+            var aRestitution = a.Material == null ? 0f : a.Material.Restitution;
+            var bRestitution = b.Material == null ? 0f : b.Material.Restitution;
 
             // 计算反弹速度
-            var bounceVelocity = -velocityAlongNormal * restitution;
+            var aBounceVelocity = -velocityAlongNormal * aRestitution;
+            var bBounceVelocity = -velocityAlongNormal * bRestitution;
 
             // 应用反弹速度
             if (!a.IsStatic) {
-                a.SetVelocity(a.Velocity + collisionNormal * bounceVelocity);
+                a.SetVelocity(a.Velocity + collisionNormal * aBounceVelocity);
             }
             if (!b.IsStatic) {
-                b.SetVelocity(b.Velocity - collisionNormal * bounceVelocity);
+                b.SetVelocity(b.Velocity - collisionNormal * bBounceVelocity);
             }
         }
 
@@ -87,6 +86,7 @@ namespace MortiseFrame.Pulse {
                 return;
             }
             a.Transform.SetPos(a.Transform.Pos + overlapDepth);
+            b.Transform.SetPos(b.Transform.Pos - overlapDepth);
             throw new System.Exception("未实现 Dynamic-Dynamic 碰撞恢复");
 
         }
