@@ -445,7 +445,7 @@ MonoBehaviour:
   dynamicBoxVels:
   - {x: 2, y: 0}
   - {x: 2, y: 0}
-  - {x: 2, y: 0}
+  - {x: 0, y: 0}
   dynamicCircleVels:
   - {x: 2, y: 0}
   staticBoxSprite: {fileID: 21300000, guid: 8ca02a58d8de8e141afa80e38c611e33, type: 3}

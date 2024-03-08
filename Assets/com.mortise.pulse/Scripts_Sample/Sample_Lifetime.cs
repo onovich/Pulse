@@ -110,6 +110,11 @@ namespace MortiseFrame.Pulse.Sample {
                     continue;
                 }
                 tf.position = rb.Transform.Pos.ToVector3();
+                if (i == 0) {
+                    var mat = new PhysicalMaterial();
+                    mat.SetRestitution(1f);
+                    rb.SetMaterial(mat);
+                }
             }
             for (int i = 0; i < dynamicCircleTFs.Length; i++) {
                 var tf = dynamicCircleTFs[i];

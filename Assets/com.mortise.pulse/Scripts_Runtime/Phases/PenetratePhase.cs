@@ -51,20 +51,27 @@ namespace MortiseFrame.Pulse {
                 return;
             }
 
+            var aReflectVelocity = FVector2.Reflect(a.Velocity, collisionNormal);
+            var bReflectVelocity = FVector2.Reflect(b.Velocity, -collisionNormal);
+
             // 计算弹性系数
             var aRestitution = a.Material == null ? 0f : a.Material.Restitution;
             var bRestitution = b.Material == null ? 0f : b.Material.Restitution;
 
             // 计算反弹速度
-            var aBounceVelocity = -velocityAlongNormal * aRestitution;
-            var bBounceVelocity = -velocityAlongNormal * bRestitution;
+            var aBounceVelocity = aReflectVelocity * aRestitution;
+            var bBounceVelocity = bReflectVelocity * bRestitution;
 
             // 应用反弹速度
             if (!a.IsStatic) {
-                a.SetVelocity(a.Velocity + collisionNormal * aBounceVelocity);
+                if (aBounceVelocity != FVector2.zero) {
+                    a.SetVelocity(aBounceVelocity);
+                }
             }
             if (!b.IsStatic) {
-                b.SetVelocity(b.Velocity - collisionNormal * bBounceVelocity);
+                if (bBounceVelocity != FVector2.zero) {
+                    b.SetVelocity(bBounceVelocity);
+                }
             }
         }
 
