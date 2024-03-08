@@ -47,7 +47,7 @@ namespace MortiseFrame.Pulse {
             // 计算碰撞法线
             var collisionNormal = (b.Transform.Pos - a.Transform.Pos).normalized;
             var relativeVelocity = b.Velocity - a.Velocity;
-            var velocityAlongNormal = Vector2.Dot(relativeVelocity, collisionNormal);
+            var velocityAlongNormal = FVector2.Dot(relativeVelocity, collisionNormal);
 
             // 如果速度沿法线方向是远离的，不应用反弹
             if (velocityAlongNormal > 0) {
@@ -55,7 +55,7 @@ namespace MortiseFrame.Pulse {
             }
 
             // 计算最低弹性系数
-            var restitution = Mathf.Min(a.Material.Restitution, b.Material.Restitution);
+            var restitution = FMath.Min(a.Material.Restitution, b.Material.Restitution);
 
             // 计算反弹速度
             var bounceVelocity = -velocityAlongNormal * restitution;
@@ -72,7 +72,7 @@ namespace MortiseFrame.Pulse {
         static void RestoreDynamic_Static(PhysicalContext context, RigidbodyEntity d, RigidbodyEntity s) {
 
             var overlapDepth = PenetratePF.PenetrateDepthRB_RB(d, s);
-            if (overlapDepth == Vector2.zero) {
+            if (overlapDepth == FVector2.zero) {
                 return;
             }
             d.Transform.SetPos(d.Transform.Pos + overlapDepth);
@@ -82,7 +82,7 @@ namespace MortiseFrame.Pulse {
         static void RestoreDynamic_Dynamic(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
 
             var overlapDepth = PenetratePF.PenetrateDepthRB_RB(a, b);
-            if (overlapDepth == Vector2.zero) {
+            if (overlapDepth == FVector2.zero) {
                 return;
             }
             a.Transform.SetPos(a.Transform.Pos + overlapDepth);

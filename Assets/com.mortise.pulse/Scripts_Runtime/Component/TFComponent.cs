@@ -2,20 +2,20 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class Transform {
+    public class TFComponent {
 
         // World
-        Vector2 pos;
-        public Vector2 Pos => pos;
+        FVector2 pos;
+        public FVector2 Pos => pos;
 
         float radAngle;
         public float RadAngle => radAngle;
 
-        public Transform(Vector2 pos) {
+        public TFComponent(FVector2 pos) {
             this.pos = pos;
         }
 
-        public void SetPos(Vector2 pos) {
+        public void SetPos(FVector2 pos) {
             this.pos = pos;
         }
 

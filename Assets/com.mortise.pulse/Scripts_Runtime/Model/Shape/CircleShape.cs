@@ -11,11 +11,11 @@ namespace MortiseFrame.Pulse {
             this.radius = radius;
         }
 
-        public Sphere GetSphere(Transform transform) {
+        public Sphere GetSphere(TFComponent transform) {
             return new Sphere(transform.Pos, radius);
         }
 
-        public bool Contains(Vector2 point) {
+        public bool Contains(FVector2 point) {
             var diff = point;
             if (diff.SqrMagnitude() <= radius * radius) {
                 return true;
@@ -23,8 +23,8 @@ namespace MortiseFrame.Pulse {
             return false;
         }
 
-        AABB IShape.GetPruneBounding(Transform transform) {
-            return new AABB(transform.Pos, new Vector2(radius * 2, radius * 2));
+        AABB IShape.GetPruneBounding(TFComponent transform) {
+            return new AABB(transform.Pos, new FVector2(radius * 2, radius * 2));
         }
 
     }

@@ -13,12 +13,28 @@ namespace MortiseFrame.Pulse {
         }
 
         // Gravity
-        public void SetGravity(Vector2 gravity) {
+        public void SetGravity(FVector2 gravity) {
             context.SetGravity(gravity);
         }
 
         // RB
-        public void Rigidbody_Add(RigidbodyEntity rb) {
+        public RigidbodyEntity Rigidbody_CreateBox(FVector2 pos, FVector2 size, float degAngle = 0) {
+            var rb = PhysicalFactory.CreateBoxRB(pos, size, degAngle);
+            Rigidbody_Add(rb);
+            return rb;
+        }
+
+        public RigidbodyEntity Rigidbody_CreateCircle(FVector2 pos, float radius) {
+            var rb = PhysicalFactory.CreateCircleRB(pos, radius);
+            Rigidbody_Add(rb);
+            return rb;
+        }
+
+        public bool Rigidbody_TryGetByID(uint id, out RigidbodyEntity res) {
+            return context.Rigidbody_TryGetByID(id, out res);
+        }
+
+        void Rigidbody_Add(RigidbodyEntity rb) {
             context.Rigidbody_Add(rb);
         }
 

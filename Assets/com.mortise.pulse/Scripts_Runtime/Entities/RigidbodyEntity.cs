@@ -20,8 +20,8 @@ namespace MortiseFrame.Pulse {
         public int Layer => layer;
 
         // Transform
-        Transform transform;
-        public Transform Transform => transform;
+        TFComponent transform;
+        public TFComponent Transform => transform;
 
         // Shape
         IShape shape;
@@ -40,18 +40,18 @@ namespace MortiseFrame.Pulse {
         public bool IsStatic => isStatic;
 
         // Velocity
-        Vector2 velocity;
-        public Vector2 Velocity => velocity;
+        FVector2 velocity;
+        public FVector2 Velocity => velocity;
 
         // Mass
         float mass;
         public float Mass => mass;
 
-        public RigidbodyEntity(Vector2 pos, IShape shape) {
+        public RigidbodyEntity(FVector2 pos, IShape shape) {
             this.id = IDService.PickRigidbodyID();
-            this.transform = new Transform(pos);
+            this.transform = new TFComponent(pos);
             this.shape = shape;
-            this.velocity = Vector2.zero;
+            this.velocity = FVector2.zero;
             this.mass = 0;
             this.isTrigger = false;
             this.isStatic = false;
@@ -70,7 +70,7 @@ namespace MortiseFrame.Pulse {
         public void SetIsStatic(bool value) => isStatic = value;
 
         // Velocity
-        public void SetVelocity(Vector2 value) => velocity = value;
+        public void SetVelocity(FVector2 value) => velocity = value;
 
         // Gravity
         public void SetMass(float value) => mass = value;
@@ -85,7 +85,7 @@ namespace MortiseFrame.Pulse {
         public void SetMaterial(PhysicalMaterial value) => material = value;
 
         // Transform
-        public void SetPos(Vector2 pos) {
+        public void SetPos(FVector2 pos) {
             transform.SetPos(pos);
         }
 

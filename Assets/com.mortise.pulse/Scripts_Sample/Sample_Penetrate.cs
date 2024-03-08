@@ -13,7 +13,7 @@ namespace MortiseFrame.Pulse.Sample {
         [SerializeField] bool drawPenetrate = true;
 
         Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform> rbs;
-        Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.Vector2)> contactDicts;
+        Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.FVector2)> contactDicts;
 
         public uint idRecord = 0;
 
@@ -22,13 +22,13 @@ namespace MortiseFrame.Pulse.Sample {
             if (staticBoxTFs == null && dynamicCircleTFs == null && dynamicBoxTFs == null) return;
 
             rbs = new Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform>();
-            contactDicts = new Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.Vector2)>();
+            contactDicts = new Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.FVector2)>();
             idRecord = 0;
 
             foreach (var boxTF in staticBoxTFs) {
                 if (boxTF == null) continue;
-                var shape = new BoxShape(new MortiseFrame.Abacus.Vector2(boxTF.localScale.x, boxTF.localScale.y));
-                var pos = new MortiseFrame.Abacus.Vector2(boxTF.position.x, boxTF.position.y);
+                var shape = new BoxShape(new MortiseFrame.Abacus.FVector2(boxTF.localScale.x, boxTF.localScale.y));
+                var pos = new MortiseFrame.Abacus.FVector2(boxTF.position.x, boxTF.position.y);
                 var radAngle = boxTF.eulerAngles.z * Mathf.Deg2Rad;
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetRadAngle(radAngle);
@@ -42,7 +42,7 @@ namespace MortiseFrame.Pulse.Sample {
             foreach (var circleTF in dynamicCircleTFs) {
                 if (circleTF == null) continue;
                 var shape = new CircleShape(circleTF.localScale.x / 2);
-                var pos = new MortiseFrame.Abacus.Vector2(circleTF.position.x, circleTF.position.y);
+                var pos = new MortiseFrame.Abacus.FVector2(circleTF.position.x, circleTF.position.y);
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetID(++idRecord);
                 rb.SetIsStatic(false);
@@ -52,8 +52,8 @@ namespace MortiseFrame.Pulse.Sample {
 
             foreach (var boxTF in dynamicBoxTFs) {
                 if (boxTF == null) continue;
-                var shape = new BoxShape(new MortiseFrame.Abacus.Vector2(boxTF.localScale.x, boxTF.localScale.y));
-                var pos = new MortiseFrame.Abacus.Vector2(boxTF.position.x, boxTF.position.y);
+                var shape = new BoxShape(new MortiseFrame.Abacus.FVector2(boxTF.localScale.x, boxTF.localScale.y));
+                var pos = new MortiseFrame.Abacus.FVector2(boxTF.position.x, boxTF.position.y);
                 var radAngle = boxTF.eulerAngles.z * Mathf.Deg2Rad;
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetRadAngle(radAngle);
@@ -85,7 +85,7 @@ namespace MortiseFrame.Pulse.Sample {
                     }
                     var overlapDepth = MortiseFrame.Pulse.PenetratePF.PenetrateDepthRB_RB(a, b);
                     var key = IDService.ContactKey(a.ID, b.ID);
-                    if (overlapDepth != MortiseFrame.Abacus.Vector2.zero) {
+                    if (overlapDepth != MortiseFrame.Abacus.FVector2.zero) {
                         if (!contactDicts.ContainsKey(key)) {
                             contactDicts.Add(key, (a, b, overlapDepth));
                         } else {
@@ -105,8 +105,8 @@ namespace MortiseFrame.Pulse.Sample {
                 var overlapDepth = kv.Item3;
                 var colorA = a.IsStatic ? Color.blue : Color.red;
                 var colorB = b.IsStatic ? Color.blue : Color.red;
-                GizmosHeler.OnDrawShape(a, colorA);
-                GizmosHeler.OnDrawShape(b, colorB);
+                GizmosHeler.OnDrawRBShape(a, colorA);
+                GizmosHeler.OnDrawRBShape(b, colorB);
                 if (a.IsStatic && !b.IsStatic) {
                     GizmosHeler.OnDrawLine(b.Transform.Pos, overlapDepth, Color.red);
                 } else if (!a.IsStatic && b.IsStatic) {
@@ -127,13 +127,13 @@ namespace MortiseFrame.Pulse.Sample {
                 if (kv.Value == null) continue;
                 var rb = kv.Key;
                 var tf = kv.Value;
-                rb.SetPos(new MortiseFrame.Abacus.Vector2(tf.position.x, tf.position.y));
+                rb.SetPos(new MortiseFrame.Abacus.FVector2(tf.position.x, tf.position.y));
                 rb.SetRadAngle(tf.eulerAngles.z * Mathf.Deg2Rad);
             }
 
             foreach (var rb in rbs.Keys) {
                 var color = rb.IsStatic ? Color.green : Color.white;
-                GizmosHeler.OnDrawShape(rb, color);
+                GizmosHeler.OnDrawRBShape(rb, color);
             }
 
             OnDrawPenetrate(epsilon);

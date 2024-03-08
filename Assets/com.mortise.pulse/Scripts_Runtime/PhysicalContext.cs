@@ -8,15 +8,15 @@ namespace MortiseFrame.Pulse {
     public class PhysicalContext {
 
         // Gravity
-        Vector2 gravity;
-        public Vector2 Gravity => gravity;
+        FVector2 gravity;
+        public FVector2 Gravity => gravity;
 
         // Event
         PhysicalEventCenter eventCenter;
         public PhysicalEventCenter EventCenter => eventCenter;
 
         // Repo
-        SortedList<uint, RigidbodyEntity> rigidbodies;
+        Dictionary<uint, RigidbodyEntity> rigidbodies;
         RigidbodyEntity[] tempRigidBodyArray;
 
         // Event Queue
@@ -33,7 +33,7 @@ namespace MortiseFrame.Pulse {
         Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)> collisionContacts;
 
         public PhysicalContext() {
-            rigidbodies = new SortedList<uint, RigidbodyEntity>();
+            rigidbodies = new Dictionary<uint, RigidbodyEntity>();
             tempRigidBodyArray = new RigidbodyEntity[0];
             eventCenter = new PhysicalEventCenter();
             collisionEnterQueue = new Queue<(RigidbodyEntity, RigidbodyEntity)>();
@@ -43,11 +43,16 @@ namespace MortiseFrame.Pulse {
             triggerStayQueue = new Queue<(RigidbodyEntity, RigidbodyEntity)>();
             triggerExitQueue = new Queue<(RigidbodyEntity, RigidbodyEntity)>();
             collisionContacts = new Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>();
+            intersectContacts = new Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>();
         }
 
         // Rigidbody
         public void Rigidbody_Add(RigidbodyEntity rb) {
             rigidbodies.Add(rb.ID, rb);
+        }
+
+        public bool Rigidbody_TryGetByID(uint id, out RigidbodyEntity res) {
+            return rigidbodies.TryGetValue(id, out res);
         }
 
         public int Rigidbody_TakeAll(out RigidbodyEntity[] res) {
@@ -71,7 +76,7 @@ namespace MortiseFrame.Pulse {
         }
 
         // Gravity
-        public void SetGravity(Vector2 value) {
+        public void SetGravity(FVector2 value) {
             gravity = value;
         }
 

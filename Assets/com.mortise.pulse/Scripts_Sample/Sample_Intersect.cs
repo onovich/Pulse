@@ -26,8 +26,8 @@ namespace MortiseFrame.Pulse.Sample {
 
             foreach (var boxTF in boxTFs) {
                 if (boxTF == null) continue;
-                var shape = new BoxShape(new MortiseFrame.Abacus.Vector2(boxTF.localScale.x, boxTF.localScale.y));
-                var pos = new MortiseFrame.Abacus.Vector2(boxTF.position.x, boxTF.position.y);
+                var shape = new BoxShape(new MortiseFrame.Abacus.FVector2(boxTF.localScale.x, boxTF.localScale.y));
+                var pos = new MortiseFrame.Abacus.FVector2(boxTF.position.x, boxTF.position.y);
                 var radAngle = boxTF.eulerAngles.z * Mathf.Deg2Rad;
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetRadAngle(radAngle);
@@ -40,7 +40,7 @@ namespace MortiseFrame.Pulse.Sample {
             foreach (var circleTF in circleTFs) {
                 if (circleTF == null) continue;
                 var shape = new CircleShape(circleTF.localScale.x / 2);
-                var pos = new MortiseFrame.Abacus.Vector2(circleTF.position.x, circleTF.position.y);
+                var pos = new MortiseFrame.Abacus.FVector2(circleTF.position.x, circleTF.position.y);
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetID(++idRecord);
                 circleTF.gameObject.name = $"Circle_{rb.ID}";
@@ -78,8 +78,8 @@ namespace MortiseFrame.Pulse.Sample {
                 var a = v.Item1;
                 var b = v.Item2;
                 var color = Color.red;
-                GizmosHeler.OnDrawShape(a, color);
-                GizmosHeler.OnDrawShape(b, color);
+                GizmosHeler.OnDrawRBShape(a, color);
+                GizmosHeler.OnDrawRBShape(b, color);
             }
         }
 
@@ -93,12 +93,12 @@ namespace MortiseFrame.Pulse.Sample {
                 if (kv.Value == null) continue;
                 var rb = kv.Key;
                 var tf = kv.Value;
-                rb.SetPos(new MortiseFrame.Abacus.Vector2(tf.position.x, tf.position.y));
+                rb.SetPos(new MortiseFrame.Abacus.FVector2(tf.position.x, tf.position.y));
                 rb.SetRadAngle(tf.eulerAngles.z * Mathf.Deg2Rad);
             }
 
             foreach (var rb in rbs.Keys) {
-                GizmosHeler.OnDrawShape(rb, Color.white);
+                GizmosHeler.OnDrawRBShape(rb, Color.white);
             }
 
             OnDrawIntersect(epsilon);

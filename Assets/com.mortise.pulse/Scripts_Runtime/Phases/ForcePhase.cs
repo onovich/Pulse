@@ -28,7 +28,7 @@ namespace MortiseFrame.Pulse {
             if (rb.IsStatic) {
                 return;
             }
-            if (rb.Velocity == Vector2.zero) {
+            if (rb.Velocity == FVector2.zero) {
                 return;
             }
             var pos = rb.Transform.Pos + rb.Velocity * dt;
