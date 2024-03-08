@@ -13,7 +13,7 @@ namespace MortiseFrame.Pulse.Sample {
         [SerializeField] bool drawPenetrate = true;
 
         Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform> rbs;
-        Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity)> contactDicts;
+        Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.Vector2)> contactDicts;
 
         public uint idRecord = 0;
 
@@ -22,7 +22,7 @@ namespace MortiseFrame.Pulse.Sample {
             if (staticBoxTFs == null && dynamicCircleTFs == null && dynamicBoxTFs == null) return;
 
             rbs = new Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform>();
-            contactDicts = new Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity)>();
+            contactDicts = new Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Abacus.Vector2)>();
             idRecord = 0;
 
             foreach (var boxTF in staticBoxTFs) {
@@ -33,6 +33,7 @@ namespace MortiseFrame.Pulse.Sample {
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetRadAngle(radAngle);
                 rb.SetID(++idRecord);
+                rb.SetIsStatic(true);
                 var boxType = rb.Transform.RadAngle == 0 ? "AABB" : "OBB";
                 boxTF.gameObject.name = $"Static_{boxType}_{rb.ID}";
                 rbs.Add(rb, boxTF);
@@ -44,7 +45,7 @@ namespace MortiseFrame.Pulse.Sample {
                 var pos = new MortiseFrame.Abacus.Vector2(circleTF.position.x, circleTF.position.y);
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetID(++idRecord);
-                rb.SetIsStatic(true);
+                rb.SetIsStatic(false);
                 circleTF.gameObject.name = $"Dynamic_Circle_{rb.ID}";
                 rbs.Add(rb, circleTF);
             }
@@ -57,7 +58,7 @@ namespace MortiseFrame.Pulse.Sample {
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetRadAngle(radAngle);
                 rb.SetID(++idRecord);
-                rb.SetIsStatic(true);
+                rb.SetIsStatic(false);
                 var boxType = rb.Transform.RadAngle == 0 ? "Dynamic_AABB" : "OBB";
                 boxTF.gameObject.name = $"Dynamic_{boxType}_{rb.ID}";
                 rbs.Add(rb, boxTF);
@@ -79,11 +80,16 @@ namespace MortiseFrame.Pulse.Sample {
                     if (a.IsStatic && b.IsStatic) {
                         continue;
                     }
+                    if (a.IsStatic) {
+                        continue;
+                    }
                     var overlapDepth = MortiseFrame.Pulse.PenetratePF.PenetrateDepthRB_RB(a, b);
                     var key = IDService.ContactKey(a.ID, b.ID);
                     if (overlapDepth != MortiseFrame.Abacus.Vector2.zero) {
                         if (!contactDicts.ContainsKey(key)) {
-                            contactDicts.Add(key, (a, b));
+                            contactDicts.Add(key, (a, b, overlapDepth));
+                        } else {
+                            contactDicts[key] = (a, b, overlapDepth);
                         }
                     } else {
                         if (contactDicts.ContainsKey(key)) {
@@ -96,10 +102,18 @@ namespace MortiseFrame.Pulse.Sample {
             foreach (var kv in contactDicts.Values) {
                 var a = kv.Item1;
                 var b = kv.Item2;
+                var overlapDepth = kv.Item3;
                 var colorA = a.IsStatic ? Color.blue : Color.red;
                 var colorB = b.IsStatic ? Color.blue : Color.red;
                 GizmosHeler.OnDrawShape(a, colorA);
                 GizmosHeler.OnDrawShape(b, colorB);
+                if (a.IsStatic && !b.IsStatic) {
+                    GizmosHeler.OnDrawLine(b.Transform.Pos, overlapDepth, Color.red);
+                } else if (!a.IsStatic && b.IsStatic) {
+                    GizmosHeler.OnDrawLine(a.Transform.Pos, overlapDepth, Color.red);
+                } else {
+                    GizmosHeler.OnDrawLine(a.Transform.Pos, overlapDepth, Color.red);
+                }
             }
         }
 

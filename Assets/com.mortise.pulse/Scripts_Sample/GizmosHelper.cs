@@ -12,9 +12,11 @@ namespace MortiseFrame.Pulse.Sample {
             }
         }
 
-        static void OnDrawRay(MortiseFrame.Abacus.Vector2 origin, MortiseFrame.Abacus.Vector2 direction, Color color) {
+        public static void OnDrawLine(MortiseFrame.Abacus.Vector2 origin, MortiseFrame.Abacus.Vector2 direction, Color color) {
             Gizmos.color = color;
-            Gizmos.DrawRay(new Vector3(origin.x, origin.y, 0), new Vector3(direction.x, direction.y, 0));
+            var from = new Vector3(origin.x, origin.y, 0);
+            var to = new Vector3(direction.x, direction.y, 0) + from;
+            Gizmos.DrawLine(from, to);
         }
 
         static void OnDrawPoint(MortiseFrame.Abacus.Vector2 point, Color color) {
