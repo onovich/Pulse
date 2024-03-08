@@ -12,6 +12,8 @@ namespace MortiseFrame.Pulse.Sample {
 
         [SerializeField] Vector2[] dynamicBoxVels;
         [SerializeField] Vector2[] dynamicCircleVels;
+        [SerializeField] float[] dynamicBoxMasses;
+        [SerializeField] float[] dynamicCircleMasses;
 
         [SerializeField] Sprite staticBoxSprite;
         [SerializeField] Sprite dynamicBoxSprite;
@@ -23,6 +25,7 @@ namespace MortiseFrame.Pulse.Sample {
         uint[] staticBoxIDs;
         uint[] dynamicBoxIDs;
         uint[] dynamicCircleIDs;
+
 
         void Start() {
 
@@ -55,7 +58,7 @@ namespace MortiseFrame.Pulse.Sample {
                 var rb = core.Rigidbody_CreateBox(tf.position.ToFVector2(), tf.localScale.ToFVector2());
                 rb.SetIsStatic(false);
                 rb.SetVelocity(dynamicBoxVels[i].ToFVector2());
-                rb.SetMass(0);
+                rb.SetMass(dynamicBoxMasses[i]);
                 tf.gameObject.name = $"Dynamic_Box_{rb.ID}";
                 var sr = tf.gameObject.GetComponent<SpriteRenderer>();
                 sr.sprite = dynamicBoxSprite;
@@ -68,7 +71,7 @@ namespace MortiseFrame.Pulse.Sample {
                 var rb = core.Rigidbody_CreateCircle(tf.position.ToFVector2(), tf.localScale.x / 2);
                 rb.SetIsStatic(false);
                 rb.SetVelocity(dynamicCircleVels[i].ToFVector2());
-                rb.SetMass(0);
+                rb.SetMass(dynamicCircleMasses[i]);
                 tf.gameObject.name = $"Dynamic_Circle_{rb.ID}";
                 var sr = tf.gameObject.GetComponent<SpriteRenderer>();
                 sr.sprite = dynamicCircleSprite;
