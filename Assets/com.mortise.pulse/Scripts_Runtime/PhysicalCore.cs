@@ -12,6 +12,11 @@ namespace MortiseFrame.Pulse {
             EventCenter = new PhysicalEventCenter();
         }
 
+        // Gravity
+        public void SetGravity(Vector2 gravity) {
+            context.SetGravity(gravity);
+        }
+
         // RB
         public void Rigidbody_Add(RigidbodyEntity rb) {
             context.Rigidbody_Add(rb);

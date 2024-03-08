@@ -20,7 +20,7 @@ namespace MortiseFrame.Pulse {
         static void ApplyIntersection(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
 
             var eventCenter = context.EventCenter;
-            if (context.CollisionContact_TryGet(a, b, out var contact)) {
+            if (context.IntersectContact_TryGet(a, b, out var contact)) {
                 // Trigger Stay
                 context.EnqueueTriggerStay(a, b);
                 // Trigger Exit
@@ -41,7 +41,7 @@ namespace MortiseFrame.Pulse {
 
         static void TriggerEnter(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
             context.EnqueueTriggerEnter(a, b);
-            context.CollisionContact_Add(a, b);
+            context.IntersectContact_Add(a, b);
         }
 
         static void TryExit(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
@@ -53,7 +53,7 @@ namespace MortiseFrame.Pulse {
 
         static void TriggerExit(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
             context.EnqueueTriggerExit(a, b);
-            context.CollisionContact_Remove(a, b);
+            context.IntersectContact_Remove(a, b);
         }
 
     }

@@ -29,6 +29,7 @@ namespace MortiseFrame.Pulse {
         Queue<(RigidbodyEntity, RigidbodyEntity)> triggerExitQueue;
 
         // Contact
+        Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)> intersectContacts;
         Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)> collisionContacts;
 
         public PhysicalContext() {
@@ -166,7 +167,7 @@ namespace MortiseFrame.Pulse {
             }
         }
 
-        // Contact
+        // Collision Contact
         public void CollisionContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             collisionContacts[key] = (key, a, b);
@@ -199,6 +200,42 @@ namespace MortiseFrame.Pulse {
 
         public void CollisionContact_Clear() {
             collisionContacts.Clear();
+        }
+
+        // Intersect Contact
+        public void IntersectContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
+            ulong key = IDService.ContactKey(a.ID, b.ID);
+            intersectContacts[key] = (key, a, b);
+        }
+
+        public bool IntersectContact_TryGet(RigidbodyEntity a, RigidbodyEntity b, out (ulong, RigidbodyEntity, RigidbodyEntity) value) {
+            ulong key = IDService.ContactKey(a.ID, b.ID);
+            return intersectContacts.TryGetValue(key, out value);
+        }
+
+        public bool IntersectContact_Remove(RigidbodyEntity a, RigidbodyEntity b) {
+            ulong key = IDService.ContactKey(a.ID, b.ID);
+            return intersectContacts.Remove(key);
+        }
+
+        public bool IntersectContact_Contains(RigidbodyEntity a, RigidbodyEntity b) {
+            ulong key = IDService.ContactKey(a.ID, b.ID);
+            return intersectContacts.ContainsKey(key);
+        }
+
+        public void IntersectContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
+            foreach (var pair in intersectContacts.Values) {
+                action.Invoke(pair);
+            }
+        }
+
+        public KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] IntersectContact_GetAll() {
+            return intersectContacts.ToArray();
+        }
+
+        public void IntersectContact_Clear() {
+            intersectContacts.Clear();
+
         }
 
     }
