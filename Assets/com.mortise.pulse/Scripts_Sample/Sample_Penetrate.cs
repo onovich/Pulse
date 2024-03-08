@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace MortiseFrame.Pulse.Sample {
 
-    public class Sample_Intersect : MonoBehaviour {
+    public class Sample_Penetrate : MonoBehaviour {
 
-        [SerializeField] List<UnityEngine.Transform> boxTFs;
-        [SerializeField] List<UnityEngine.Transform> circleTFs;
+        [SerializeField] List<UnityEngine.Transform> staticBoxTFs;
+        [SerializeField] List<UnityEngine.Transform> dynamicCircleTFs;
+        [SerializeField] List<UnityEngine.Transform> dynamicBoxTFs;
 
         [SerializeField] bool epsilonDirection = false;
-        [SerializeField] bool drawIntersect = true;
+        [SerializeField] bool drawPenetrate = true;
 
         Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform> rbs;
         Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity)> contactDicts;
@@ -18,13 +19,13 @@ namespace MortiseFrame.Pulse.Sample {
 
         [ContextMenu("RefreshShapes")]
         void RefreshShapes() {
-            if (boxTFs == null && circleTFs == null) return;
+            if (staticBoxTFs == null && dynamicCircleTFs == null && dynamicBoxTFs == null) return;
 
             rbs = new Dictionary<MortiseFrame.Pulse.RigidbodyEntity, UnityEngine.Transform>();
             contactDicts = new Dictionary<ulong, (MortiseFrame.Pulse.RigidbodyEntity, MortiseFrame.Pulse.RigidbodyEntity)>();
             idRecord = 0;
 
-            foreach (var boxTF in boxTFs) {
+            foreach (var boxTF in staticBoxTFs) {
                 if (boxTF == null) continue;
                 var shape = new BoxShape(new MortiseFrame.Abacus.Vector2(boxTF.localScale.x, boxTF.localScale.y));
                 var pos = new MortiseFrame.Abacus.Vector2(boxTF.position.x, boxTF.position.y);
@@ -33,23 +34,38 @@ namespace MortiseFrame.Pulse.Sample {
                 rb.SetRadAngle(radAngle);
                 rb.SetID(++idRecord);
                 var boxType = rb.Transform.RadAngle == 0 ? "AABB" : "OBB";
-                boxTF.gameObject.name = $"{boxType}_{rb.ID}";
+                boxTF.gameObject.name = $"Static_{boxType}_{rb.ID}";
                 rbs.Add(rb, boxTF);
             }
 
-            foreach (var circleTF in circleTFs) {
+            foreach (var circleTF in dynamicCircleTFs) {
                 if (circleTF == null) continue;
                 var shape = new CircleShape(circleTF.localScale.x / 2);
                 var pos = new MortiseFrame.Abacus.Vector2(circleTF.position.x, circleTF.position.y);
                 var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
                 rb.SetID(++idRecord);
-                circleTF.gameObject.name = $"Circle_{rb.ID}";
+                rb.SetIsStatic(true);
+                circleTF.gameObject.name = $"Dynamic_Circle_{rb.ID}";
                 rbs.Add(rb, circleTF);
+            }
+
+            foreach (var boxTF in dynamicBoxTFs) {
+                if (boxTF == null) continue;
+                var shape = new BoxShape(new MortiseFrame.Abacus.Vector2(boxTF.localScale.x, boxTF.localScale.y));
+                var pos = new MortiseFrame.Abacus.Vector2(boxTF.position.x, boxTF.position.y);
+                var radAngle = boxTF.eulerAngles.z * Mathf.Deg2Rad;
+                var rb = new MortiseFrame.Pulse.RigidbodyEntity(pos, shape);
+                rb.SetRadAngle(radAngle);
+                rb.SetID(++idRecord);
+                rb.SetIsStatic(true);
+                var boxType = rb.Transform.RadAngle == 0 ? "Dynamic_AABB" : "OBB";
+                boxTF.gameObject.name = $"Dynamic_{boxType}_{rb.ID}";
+                rbs.Add(rb, boxTF);
             }
         }
 
-        void OnDrawIntersect(float epsilon) {
-            if (!drawIntersect) {
+        void OnDrawPenetrate(float epsilon) {
+            if (!drawPenetrate) {
                 return;
             }
 
@@ -60,9 +76,12 @@ namespace MortiseFrame.Pulse.Sample {
                     if (a == b) {
                         continue;
                     }
-                    var isIntersect = MortiseFrame.Pulse.IntersectPF.IsIntersectRB_RB(a, b, epsilon);
+                    if (a.IsStatic && b.IsStatic) {
+                        continue;
+                    }
+                    var overlapDepth = MortiseFrame.Pulse.PenetratePF.PenetrateDepthRB_RB(a, b);
                     var key = IDService.ContactKey(a.ID, b.ID);
-                    if (isIntersect) {
+                    if (overlapDepth != MortiseFrame.Abacus.Vector2.zero) {
                         if (!contactDicts.ContainsKey(key)) {
                             contactDicts.Add(key, (a, b));
                         }
@@ -74,12 +93,13 @@ namespace MortiseFrame.Pulse.Sample {
                 }
             }
 
-            foreach (var v in contactDicts.Values) {
-                var a = v.Item1;
-                var b = v.Item2;
-                var color = Color.red;
-                GizmosHeler.OnDrawShape(a, color);
-                GizmosHeler.OnDrawShape(b, color);
+            foreach (var kv in contactDicts.Values) {
+                var a = kv.Item1;
+                var b = kv.Item2;
+                var colorA = a.IsStatic ? Color.blue : Color.red;
+                var colorB = b.IsStatic ? Color.blue : Color.red;
+                GizmosHeler.OnDrawShape(a, colorA);
+                GizmosHeler.OnDrawShape(b, colorB);
             }
         }
 
@@ -98,10 +118,11 @@ namespace MortiseFrame.Pulse.Sample {
             }
 
             foreach (var rb in rbs.Keys) {
-                GizmosHeler.OnDrawShape(rb, Color.white);
+                var color = rb.IsStatic ? Color.green : Color.white;
+                GizmosHeler.OnDrawShape(rb, color);
             }
 
-            OnDrawIntersect(epsilon);
+            OnDrawPenetrate(epsilon);
         }
 
     }
