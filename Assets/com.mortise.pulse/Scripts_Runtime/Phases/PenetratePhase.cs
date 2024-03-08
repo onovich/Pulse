@@ -74,7 +74,6 @@ namespace MortiseFrame.Pulse {
             if (overlapDepth == FVector2.zero) {
                 return;
             }
-            PLog.Log("RestoreDynamic_Static: dPos = " + d.Transform.Pos + "overlapDepth = " + overlapDepth);
             d.Transform.SetPos(d.Transform.Pos + overlapDepth);
 
         }
@@ -85,9 +84,8 @@ namespace MortiseFrame.Pulse {
             if (overlapDepth == FVector2.zero) {
                 return;
             }
-            a.Transform.SetPos(a.Transform.Pos + overlapDepth);
-            b.Transform.SetPos(b.Transform.Pos - overlapDepth);
-            throw new System.Exception("未实现 Dynamic-Dynamic 碰撞恢复");
+            a.Transform.SetPos(a.Transform.Pos - overlapDepth);
+            b.Transform.SetPos(b.Transform.Pos + overlapDepth);
 
         }
 
