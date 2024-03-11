@@ -14,6 +14,8 @@ namespace MortiseFrame.Pulse.Sample {
         [SerializeField] Vector2[] dynamicCircleVels;
         [SerializeField] float[] dynamicBoxMasses;
         [SerializeField] float[] dynamicCircleMasses;
+        [SerializeField] float[] dynamicBoxRestitution;
+        [SerializeField] float[] dynamicCircleRestitution;
 
         [SerializeField] Sprite staticBoxSprite;
         [SerializeField] Sprite dynamicBoxSprite;
@@ -64,6 +66,8 @@ namespace MortiseFrame.Pulse.Sample {
                 sr.sprite = dynamicBoxSprite;
                 sr.color = Color.red;
                 dynamicBoxIDs[i] = rb.ID;
+                var resti = dynamicBoxRestitution[i];
+                rb.SetRestitution(resti);
             }
 
             for (int i = 0; i < dynamicCircleTFs.Length; i++) {
@@ -77,6 +81,8 @@ namespace MortiseFrame.Pulse.Sample {
                 sr.sprite = dynamicCircleSprite;
                 sr.color = Color.red;
                 dynamicCircleIDs[i] = rb.ID;
+                var resti = dynamicCircleRestitution[i];
+                rb.SetRestitution(resti);
             }
 
             core.EventCenter.OnCollisionEnterHandle = (a, b) => { Debug.Log($"OnCollisionEnter: {a.ID} {b.ID}"); };
@@ -113,11 +119,6 @@ namespace MortiseFrame.Pulse.Sample {
                     continue;
                 }
                 tf.position = rb.Transform.Pos.ToVector3();
-                if (i == 0) {
-                    var mat = new PhysicalMaterial();
-                    mat.SetRestitution(1f);
-                    rb.SetMaterial(mat);
-                }
             }
             for (int i = 0; i < dynamicCircleTFs.Length; i++) {
                 var tf = dynamicCircleTFs[i];
