@@ -81,6 +81,9 @@ namespace MortiseFrame.Pulse {
             holderID = id;
         }
 
+        // Layer
+        public void SetLayer(uint value) => layer = value;
+
         // Material
         public void SetRestitution(float value) => restitution = value;
 
