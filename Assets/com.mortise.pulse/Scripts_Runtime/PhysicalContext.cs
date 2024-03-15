@@ -5,15 +5,15 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class PhysicalContext {
+    internal class PhysicalContext {
 
         // Gravity
         FVector2 gravity;
-        public FVector2 Gravity => gravity;
+        internal FVector2 Gravity => gravity;
 
         // Event
         PhysicalEventCenter eventCenter;
-        public PhysicalEventCenter EventCenter => eventCenter;
+        internal PhysicalEventCenter EventCenter => eventCenter;
 
         // Repo
         Dictionary<uint, RigidbodyEntity> rigidbodies;
@@ -35,7 +35,7 @@ namespace MortiseFrame.Pulse {
         // Ignore
         HashSet<ulong> ignoreDict;
 
-        public PhysicalContext() {
+        internal PhysicalContext() {
             rigidbodies = new Dictionary<uint, RigidbodyEntity>();
             tempRigidBodyArray = new RigidbodyEntity[0];
             eventCenter = new PhysicalEventCenter();
@@ -51,15 +51,15 @@ namespace MortiseFrame.Pulse {
         }
 
         // Rigidbody
-        public void Rigidbody_Add(RigidbodyEntity rb) {
+        internal void Rigidbody_Add(RigidbodyEntity rb) {
             rigidbodies.Add(rb.ID, rb);
         }
 
-        public bool Rigidbody_TryGetByID(uint id, out RigidbodyEntity res) {
+        internal bool Rigidbody_TryGetByID(uint id, out RigidbodyEntity res) {
             return rigidbodies.TryGetValue(id, out res);
         }
 
-        public int Rigidbody_TakeAll(out RigidbodyEntity[] res) {
+        internal int Rigidbody_TakeAll(out RigidbodyEntity[] res) {
             int count = rigidbodies.Count;
             if (count > tempRigidBodyArray.Length) {
                 tempRigidBodyArray = new RigidbodyEntity[(int)(count * 1.5f)];
@@ -69,35 +69,35 @@ namespace MortiseFrame.Pulse {
             return count;
         }
 
-        public void Rigidbody_Remove(RigidbodyEntity rb) {
+        internal void Rigidbody_Remove(RigidbodyEntity rb) {
             rigidbodies.Remove(rb.ID);
         }
 
-        public void Rigidbody_ForEach(Action<RigidbodyEntity> action) {
+        internal void Rigidbody_ForEach(Action<RigidbodyEntity> action) {
             foreach (var rb in rigidbodies.Values) {
                 action.Invoke(rb);
             }
         }
 
         // Gravity
-        public void SetGravity(FVector2 value) {
+        internal void SetGravity(FVector2 value) {
             gravity = value;
         }
 
         // Collision
-        public void EnqueueCollisionEnter(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueCollisionEnter(RigidbodyEntity a, RigidbodyEntity b) {
             collisionEnterQueue.Enqueue((a, b));
         }
 
-        public void EnqueueCollisionStay(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueCollisionStay(RigidbodyEntity a, RigidbodyEntity b) {
             collisionStayQueue.Enqueue((a, b));
         }
 
-        public void EnqueueCollisionExit(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueCollisionExit(RigidbodyEntity a, RigidbodyEntity b) {
             collisionExitQueue.Enqueue((a, b));
         }
 
-        public bool TryDequeueCollisionEnter(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueCollisionEnter(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (collisionEnterQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -108,7 +108,7 @@ namespace MortiseFrame.Pulse {
             }
         }
 
-        public bool TryDequeueCollisionStay(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueCollisionStay(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (collisionStayQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -119,7 +119,7 @@ namespace MortiseFrame.Pulse {
             }
         }
 
-        public bool TryDequeueCollisionExit(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueCollisionExit(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (collisionExitQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -131,19 +131,19 @@ namespace MortiseFrame.Pulse {
         }
 
         // Trigger
-        public void EnqueueTriggerEnter(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueTriggerEnter(RigidbodyEntity a, RigidbodyEntity b) {
             triggerEnterQueue.Enqueue((a, b));
         }
 
-        public void EnqueueTriggerStay(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueTriggerStay(RigidbodyEntity a, RigidbodyEntity b) {
             triggerStayQueue.Enqueue((a, b));
         }
 
-        public void EnqueueTriggerExit(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void EnqueueTriggerExit(RigidbodyEntity a, RigidbodyEntity b) {
             triggerExitQueue.Enqueue((a, b));
         }
 
-        public bool TryDequeueTriggerEnter(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueTriggerEnter(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (triggerEnterQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -154,7 +154,7 @@ namespace MortiseFrame.Pulse {
             }
         }
 
-        public bool TryDequeueTriggerStay(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueTriggerStay(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (triggerStayQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -165,7 +165,7 @@ namespace MortiseFrame.Pulse {
             }
         }
 
-        public bool TryDequeueTriggerExit(out RigidbodyEntity a, out RigidbodyEntity b) {
+        internal bool TryDequeueTriggerExit(out RigidbodyEntity a, out RigidbodyEntity b) {
             if (triggerExitQueue.TryDequeue(out var pair)) {
                 (a, b) = pair;
                 return true;
@@ -177,92 +177,92 @@ namespace MortiseFrame.Pulse {
         }
 
         // Collision Contact
-        public void CollisionContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void CollisionContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             collisionContacts[key] = (key, a, b);
         }
 
-        public bool CollisionContact_TryGet(RigidbodyEntity a, RigidbodyEntity b, out (ulong, RigidbodyEntity, RigidbodyEntity) value) {
+        internal bool CollisionContact_TryGet(RigidbodyEntity a, RigidbodyEntity b, out (ulong, RigidbodyEntity, RigidbodyEntity) value) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return collisionContacts.TryGetValue(key, out value);
         }
 
-        public bool CollisionContact_Remove(RigidbodyEntity a, RigidbodyEntity b) {
+        internal bool CollisionContact_Remove(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return collisionContacts.Remove(key);
         }
 
-        public bool CollisionContact_Contains(RigidbodyEntity a, RigidbodyEntity b) {
+        internal bool CollisionContact_Contains(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return collisionContacts.ContainsKey(key);
         }
 
-        public void CollisionContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
+        internal void CollisionContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
             foreach (var pair in collisionContacts.Values) {
                 action.Invoke(pair);
             }
         }
 
-        public KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] CollisionContact_GetAll() {
+        internal KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] CollisionContact_GetAll() {
             return collisionContacts.ToArray();
         }
 
-        public void CollisionContact_Clear() {
+        internal void CollisionContact_Clear() {
             collisionContacts.Clear();
         }
 
         // Intersect Contact
-        public void IntersectContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
+        internal void IntersectContact_Add(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             intersectContacts[key] = (key, a, b);
         }
 
-        public bool IntersectContact_TryGet(RigidbodyEntity a, RigidbodyEntity b, out (ulong, RigidbodyEntity, RigidbodyEntity) value) {
+        internal bool IntersectContact_TryGet(RigidbodyEntity a, RigidbodyEntity b, out (ulong, RigidbodyEntity, RigidbodyEntity) value) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return intersectContacts.TryGetValue(key, out value);
         }
 
-        public bool IntersectContact_Remove(RigidbodyEntity a, RigidbodyEntity b) {
+        internal bool IntersectContact_Remove(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return intersectContacts.Remove(key);
         }
 
-        public bool IntersectContact_Contains(RigidbodyEntity a, RigidbodyEntity b) {
+        internal bool IntersectContact_Contains(RigidbodyEntity a, RigidbodyEntity b) {
             ulong key = IDService.ContactKey(a.ID, b.ID);
             return intersectContacts.ContainsKey(key);
         }
 
-        public void IntersectContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
+        internal void IntersectContact_ForEach(Action<(ulong, RigidbodyEntity, RigidbodyEntity)> action) {
             foreach (var pair in intersectContacts.Values) {
                 action.Invoke(pair);
             }
         }
 
-        public KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] IntersectContact_GetAll() {
+        internal KeyValuePair<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>[] IntersectContact_GetAll() {
             return intersectContacts.ToArray();
         }
 
-        public void IntersectContact_Clear() {
+        internal void IntersectContact_Clear() {
             intersectContacts.Clear();
         }
 
         // Ignore
-        public void Ignore_Add(uint layerA, uint layerB) {
+        internal void Ignore_Add(uint layerA, uint layerB) {
             ulong key = IDService.ContactKey(layerA, layerB);
             ignoreDict.Add(key);
         }
 
-        public void Ignore_Remove(uint layerA, uint layerB) {
+        internal void Ignore_Remove(uint layerA, uint layerB) {
             ulong key = IDService.ContactKey(layerA, layerB);
             ignoreDict.Remove(key);
         }
 
-        public bool Ignore_Contains(uint layerA, uint layerB) {
+        internal bool Ignore_Contains(uint layerA, uint layerB) {
             ulong key = IDService.ContactKey(layerA, layerB);
             return ignoreDict.Contains(key);
         }
 
-        public void Clear() {
+        internal void Clear() {
             rigidbodies.Clear();
             collisionEnterQueue.Clear();
             collisionStayQueue.Clear();

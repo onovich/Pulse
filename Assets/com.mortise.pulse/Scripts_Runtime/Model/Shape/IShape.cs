@@ -1,6 +1,6 @@
 namespace MortiseFrame.Pulse {
 
-    public interface IShape {
+    internal interface IShape {
 
         AABB GetPruneBounding(TFComponent tf);
 

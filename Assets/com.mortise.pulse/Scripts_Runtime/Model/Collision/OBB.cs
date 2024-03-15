@@ -2,18 +2,18 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class OBB {
+    internal class OBB {
 
-        public FVector2 AxisX { get; private set; }
-        public FVector2 AxisY { get; private set; }
+        internal FVector2 AxisX { get; private set; }
+        internal FVector2 AxisY { get; private set; }
 
-        public FVector2 Center { get; private set; }
-        public FVector2 Size { get; private set; }
+        internal FVector2 Center { get; private set; }
+        internal FVector2 Size { get; private set; }
 
-        public float RadAngle { get; private set; }
-        public FVector2[] Vertices { get; private set; }
+        internal float RadAngle { get; private set; }
+        internal FVector2[] Vertices { get; private set; }
 
-        public OBB(FVector2 center, FVector2 size, float radAngle) {
+        internal OBB(FVector2 center, FVector2 size, float radAngle) {
 
             Center = center;
             Size = size;
@@ -31,14 +31,14 @@ namespace MortiseFrame.Pulse {
 
         }
 
-        public bool Contains(FVector2 point) {
+        internal bool Contains(FVector2 point) {
             var localPoint = point - Center;
             var localX = FVector2.Dot(localPoint, AxisX);
             var localY = FVector2.Dot(localPoint, AxisY);
             return FMath.Abs(localX) <= Size.x * 0.5f && FMath.Abs(localY) <= Size.y * 0.5f;
         }
 
-        public (float Min, float Max) ProjectOntoAxis(FVector2 axis) {
+        internal (float Min, float Max) ProjectOntoAxis(FVector2 axis) {
             float dotProduct = FVector2.Dot(this.Vertices[0], axis);
             float min = dotProduct;
             float max = dotProduct;

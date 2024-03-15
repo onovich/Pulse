@@ -2,9 +2,9 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public static class ForcePhase {
+    internal static class ForcePhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
 
             context.Rigidbody_ForEach(rb => {
                 ApplyGravity(context, rb, dt);

@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class CollisionEnterPhase {
+    internal static class CollisionEnterPhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
             while (context.TryDequeueCollisionEnter(out var a, out var b)) {
                 ApplyCollisionEnter(context, a, b);
             }

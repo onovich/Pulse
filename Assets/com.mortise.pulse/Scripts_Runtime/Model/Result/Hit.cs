@@ -6,12 +6,10 @@ namespace MortiseFrame.Pulse {
 
         public FVector2 point;
         public FVector2 normal;
-        public IShape shape;
 
-        public Hits(FVector2 point, FVector2 normal, IShape shape) {
+        public Hits(FVector2 point, FVector2 normal) {
             this.point = point;
             this.normal = normal;
-            this.shape = shape;
         }
 
     }

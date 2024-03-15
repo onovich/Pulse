@@ -2,9 +2,9 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public static class PenetratePF {
+    internal static class PenetratePF {
 
-        public static FVector2 PenetrateDepthRB_RB(RigidbodyEntity a, RigidbodyEntity b) {
+        internal static FVector2 PenetrateDepthRB_RB(RigidbodyEntity a, RigidbodyEntity b) {
             IShape aShape = a.Shape;
             IShape bShape = b.Shape;
 

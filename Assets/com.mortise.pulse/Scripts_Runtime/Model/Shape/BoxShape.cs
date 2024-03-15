@@ -2,24 +2,24 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class BoxShape : IShape {
+    internal class BoxShape : IShape {
 
         FVector2 size;
-        public FVector2 Size => size;
+        internal FVector2 Size => size;
 
-        public BoxShape(FVector2 size) {
+        internal BoxShape(FVector2 size) {
             this.size = size;
         }
 
-        public AABB GetAABB(TFComponent transform) {
+        internal AABB GetAABB(TFComponent transform) {
             return new AABB(transform.Pos, size);
         }
 
-        public OBB GetOBB(TFComponent transform) {
+        internal OBB GetOBB(TFComponent transform) {
             return new OBB(transform.Pos, size, transform.RadAngle);
         }
 
-        public void SetSize(FVector2 size) {
+        internal void SetSize(FVector2 size) {
             this.size = size;
         }
 

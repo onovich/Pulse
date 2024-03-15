@@ -2,9 +2,9 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public static class PenetratePhase {
+    internal static class PenetratePhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
 
             context.CollisionContact_ForEach((kv) => {
                 var a = kv.Item2;

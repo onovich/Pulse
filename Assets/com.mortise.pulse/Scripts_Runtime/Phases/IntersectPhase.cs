@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class IntersectPhase {
+    internal static class IntersectPhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
 
             var count = context.Rigidbody_TakeAll(out var entities);
             for (int i = 0; i < count; i++) {

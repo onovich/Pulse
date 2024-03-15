@@ -21,11 +21,11 @@ namespace MortiseFrame.Pulse {
 
         // Transform
         TFComponent transform;
-        public TFComponent Transform => transform;
+        internal TFComponent Transform => transform;
 
         // Shape
         IShape shape;
-        public IShape Shape => shape;
+        internal IShape Shape => shape;
 
         // Material
         float restitution;
@@ -47,7 +47,7 @@ namespace MortiseFrame.Pulse {
         float mass;
         public float Mass => mass;
 
-        public RigidbodyEntity(FVector2 pos, IShape shape) {
+        internal RigidbodyEntity(FVector2 pos, IShape shape) {
             this.id = IDService.PickRigidbodyID();
             this.transform = new TFComponent(pos);
             this.shape = shape;

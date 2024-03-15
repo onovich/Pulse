@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class TriggerExitPhase {
+    internal static class TriggerExitPhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
             while (context.TryDequeueTriggerExit(out var a, out var b)) {
                 ApplyTriggerExit(context, a, b);
             }

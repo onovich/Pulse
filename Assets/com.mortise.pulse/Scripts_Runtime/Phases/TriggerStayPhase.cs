@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class TriggerStayPhase {
+    internal static class TriggerStayPhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
             while (context.TryDequeueTriggerStay(out var a, out var b)) {
                 ApplyTriggerStay(context, a, b);
             }

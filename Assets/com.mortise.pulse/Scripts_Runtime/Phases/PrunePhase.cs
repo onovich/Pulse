@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class PrunePhase {
+    internal static class PrunePhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
 
         }
 

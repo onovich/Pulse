@@ -2,9 +2,9 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public static class IntersectPF {
+    internal static class IntersectPF {
 
-        public static bool IsIntersectRB_RB(RigidbodyEntity a, RigidbodyEntity b, float epsilon) {
+        internal static bool IsIntersectRB_RB(RigidbodyEntity a, RigidbodyEntity b, float epsilon) {
             IShape aShape = a.Shape;
             IShape bShape = b.Shape;
 

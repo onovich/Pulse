@@ -2,20 +2,20 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class CircleShape : IShape {
+    internal class CircleShape : IShape {
 
         float radius;
-        public float Radius => radius;
+        internal float Radius => radius;
 
-        public CircleShape(float radius) {
+        internal CircleShape(float radius) {
             this.radius = radius;
         }
 
-        public Sphere GetSphere(TFComponent transform) {
+        internal Sphere GetSphere(TFComponent transform) {
             return new Sphere(transform.Pos, radius);
         }
 
-        public bool Contains(FVector2 point) {
+        internal bool Contains(FVector2 point) {
             var diff = point;
             if (diff.SqrMagnitude() <= radius * radius) {
                 return true;

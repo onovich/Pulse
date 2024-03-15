@@ -1,8 +1,8 @@
 namespace MortiseFrame.Pulse {
 
-    public static class TriggerEnterPhase {
+    internal static class TriggerEnterPhase {
 
-        public static void Tick(PhysicalContext context, float dt) {
+        internal static void Tick(PhysicalContext context, float dt) {
             while (context.TryDequeueTriggerEnter(out var a, out var b)) {
                 ApplyTriggerEnter(context, a, b);
             }
