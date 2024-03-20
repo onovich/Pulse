@@ -2,6 +2,13 @@
 Pulse is a miniature 2D physics engine developed in C#, tailored for games that do not require realistic physics simulations. The name "Pulse" is derived from its origins as a collision detection library, capturing a nature of physics interactions.<br/>
 **Pulse 是用 C# 编写的迷你物理引擎，适用于 2D 且不需要拟真物理效果的游戏。名字取自于“脉冲”，由最初的碰撞检测库扩展而来。**
 
+# Inspiration
+[FPPhysics2d](https://github.com/GameArki/GameArkiSetup/tree/main/Assets/com.gamearki.fpphysics2d)
+
+# Readiness
+Still in development and iteration, only basic functionalities have been initially completed.Have not been tested in commercial projects. It is not recommended for use in official projects. Suitable for small 2D projects or for reference and learning purposes.<br/>
+**初步完成，仍需开发迭代。未经商业项目实验。不建议用于正式项目。可以用于 2D 小型项目或者参考学习。**
+
 # Features
 ```
 ======== Legend ========
@@ -83,8 +90,7 @@ void FixedUpdate() {
 
 # Dependency
 Math library
-
-github.com/onovich/Abacus
+[Abacus](https://github.com/onovich/Abacus)
 
 # UPM URL
 ssh://git@github.com/onovich/Pulse.git?path=/Assets/com.mortise.pulse#main
